@@ -10,3 +10,6 @@
 ### 15-05-2026 11:16
 - **Prompt**: Modify plan.md to add the members' names: Kevin, Cindy and Duc.
 
+### 15-05-2026 11:19
+- **Prompt**: Replace the Members A, B and C with the actual names and bear in mind we have only two weeks to work on this project. Tight deadline, so refactor plan.md accordingly. This is a school project so massively reduce the complexity. Just make sure that the plan conforms to the instructions.
+
