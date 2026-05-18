@@ -16,3 +16,6 @@
 ### 18-05-2026 11:05
 - **Prompt**: Check the #file:betterPlan.md . DO NOT EDIT THE FILE. I am quite lost on the planning process as there is too much things to implement. Do not make it complex and make it too beyond python. Do you have any reccomendations on the planning, and maybe can you ask me questions at the same time on what i can do for the planning?
 
+### 18-05-2026 11:05
+- **Prompt**: Quickly inspect the workspace for existing implementation artifacts relevant to a python-first capstone. Tell me: 1) whether there is an app scaffold already, 2) what top-level directories/files suggest the current stage, and 3) whether there are any obvious Python, web, or RAG-related files. Keep it concise and focus on what this means for planning, not implementation.
+
