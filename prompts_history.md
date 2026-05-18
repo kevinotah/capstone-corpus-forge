@@ -22,3 +22,6 @@
 ### 18-05-2026 11:07
 - **Prompt**: Please IGNORE the #file:plan.md file, as it is flawed
 
+### 18-05-2026 11:08
+- **Prompt**: Ask me whatever questions neccesary for the planing process, and maybe some reccomendations
+
