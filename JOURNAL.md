@@ -24,3 +24,8 @@
 - **Hook Version**: 1.02
 - **Date**: 15-05-2026 11:19
 - **Prompt**: Replace the Members A, B and C with the actual names and bear in mind we have only two weeks to work on this project. Tight deadline, so refactor plan.md accordingly. This is a school project so massively reduce the complexity. Just make sure that the plan conforms to the instructions.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 18-05-2026 11:05
+- **Prompt**: Check the #file:betterPlan.md . DO NOT EDIT THE FILE. I am quite lost on the planning process as there is too much things to implement. Do not make it complex and make it too beyond python. Do you have any reccomendations on the planning, and maybe can you ask me questions at the same time on what i can do for the planning?
