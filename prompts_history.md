@@ -31,3 +31,6 @@
 ### 18-05-2026 11:26
 - **Prompt**: I have made up my ,ind and created a folder called capplication.  Can you create files / folders the barebones skeletons with TODO inside the files so that i am able to do the 1st stage? No AI features is needed for the first stage.
 
+### 18-05-2026 11:30
+- **Prompt**: One small question. What is the pre-requisite to run this. Please be brief
+

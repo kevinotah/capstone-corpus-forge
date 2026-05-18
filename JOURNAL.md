@@ -49,8 +49,22 @@
 - **Hook Version**: 1.02
 - **Date**: 18-05-2026 11:20
 - **Prompt**: I have updated the #file:betterPlan.md . I am quite confused on what I want to use for the backend system. What do you think I should use for backend for the smoothest and easiest implementation?
+- **Agent Version**: 2.3
+- **Date**: 18-05-2026 11:27
+- **User**: anh-duc.vo@epita.fr
+- **Prompt**: I have made up my ,ind and created a folder called capplication.  Can you create files / folders the barebones skeletons with TODO inside the files so that i am able to do the 1st stage? No AI features is needed for the first stage.
+- **CoPilot Mode**: Edit
+- **CoPilot Model**: GPT-5.4 mini
+- **Socratic Mode**: ON
+- **Changes Made**: Created a minimal stage 1 Flask-style skeleton under application/ with app entrypoint, local storage stub, templates, styling, placeholder test, and persistence folders.
+- **Context and Reasons for Changes**: User requested barebones files and folders for the first stage only, with no AI features. The workspace contained an empty application/ folder rather than the mentioned capplication/ folder, so the skeleton was created in the existing project directory.
 
 ### **New Interaction**
 - **Hook Version**: 1.02
 - **Date**: 18-05-2026 11:26
 - **Prompt**: I have made up my ,ind and created a folder called capplication.  Can you create files / folders the barebones skeletons with TODO inside the files so that i am able to do the 1st stage? No AI features is needed for the first stage.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 18-05-2026 11:30
+- **Prompt**: One small question. What is the pre-requisite to run this. Please be brief
