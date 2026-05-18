@@ -49,3 +49,8 @@
 - **Hook Version**: 1.02
 - **Date**: 18-05-2026 11:20
 - **Prompt**: I have updated the #file:betterPlan.md . I am quite confused on what I want to use for the backend system. What do you think I should use for backend for the smoothest and easiest implementation?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 18-05-2026 11:26
+- **Prompt**: I have made up my ,ind and created a folder called capplication.  Can you create files / folders the barebones skeletons with TODO inside the files so that i am able to do the 1st stage? No AI features is needed for the first stage.
