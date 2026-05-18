@@ -34,3 +34,6 @@
 ### 18-05-2026 11:30
 - **Prompt**: One small question. What is the pre-requisite to run this. Please be brief
 
+### 18-05-2026 11:43
+- **Prompt**: Ok I might want you to slow down here.  Do you have suggestions on what i should in order so it is easiest? And suggestions on the implementation, cuz the todo is very abstract
+
