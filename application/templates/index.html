@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Corpus Forge - Stage 1{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <h1>Corpus Forge</h1>
+    <p>Stage 1 skeleton: upload, store, list, select, and delete documents.</p>
+  </section>
+
+  <section class="panel">
+    <h2>TODO</h2>
+    <ul>
+      <li>Build document upload form.</li>
+      <li>Load persisted documents from local storage.</li>
+      <li>Allow selecting documents for future AI features.</li>
+      <li>Implement delete and browse actions.</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h2>Documents</h2>
+    {% if documents %}
+      <ul>
+        {% for document in documents %}
+          <li>{{ document }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No documents yet.</p>
+    {% endif %}
+  </section>
+{% endblock %}
