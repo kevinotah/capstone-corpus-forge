@@ -19,3 +19,6 @@
 ### 18-05-2026 11:05
 - **Prompt**: Quickly inspect the workspace for existing implementation artifacts relevant to a python-first capstone. Tell me: 1) whether there is an app scaffold already, 2) what top-level directories/files suggest the current stage, and 3) whether there are any obvious Python, web, or RAG-related files. Keep it concise and focus on what this means for planning, not implementation.
 
+### 18-05-2026 11:07
+- **Prompt**: Please IGNORE the #file:plan.md file, as it is flawed
+
