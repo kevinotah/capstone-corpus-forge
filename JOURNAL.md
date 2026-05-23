@@ -120,3 +120,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 15:31
 - **Prompt**: the secret key can be anything right? Also, do I have to add this to gitignore?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 15:34
+- **Prompt**: I don't know how exactly but I think that pathlib would be great for this...
