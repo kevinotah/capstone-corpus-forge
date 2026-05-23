@@ -52,9 +52,6 @@
 - **Agent Version**: 2.3
 - **Date**: 18-05-2026 11:27
 - **User**: anh-duc.vo@epita.fr
- - **Agent Version**: 2.3
- - **Date**: 18-05-2026 11:27
- - **User**: Kevin
 - **Prompt**: I have made up my ,ind and created a folder called capplication.  Can you create files / folders the barebones skeletons with TODO inside the files so that i am able to do the 1st stage? No AI features is needed for the first stage.
 - **CoPilot Mode**: Edit
 - **CoPilot Model**: GPT-5.4 mini
@@ -82,9 +79,6 @@
 - **Agent Version**: 2.3
 - **Date**: 23-05-2026 14:44
 - **User**: anh-duc.vo@epita.fr
- - **Agent Version**: 2.3
- - **Date**: 23-05-2026 14:44
- - **User**: Kevin
 - **Prompt**: It's been a few days, I need a little debrief of what's going on so far in the project and what next steps to take...
 - **CoPilot Mode**: Plan
 - **CoPilot Model**: GPT-5 mini
@@ -106,3 +100,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 14:57
 - **Prompt**: No, undo and scratch that
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 15:05
+- **Prompt**: So for now I just want to iumplement file uploading, removing and selecting in app.py. Can you help me understand what secret key, upload folder, database path, actually are... especially secret key. Also, how do I test that the app still starts? Just running app.py and following the link eh?

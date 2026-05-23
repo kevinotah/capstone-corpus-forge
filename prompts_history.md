@@ -46,3 +46,6 @@
 ### 23-05-2026 14:57
 - **Prompt**: No, undo and scratch that
 
+### 23-05-2026 15:05
+- **Prompt**: So for now I just want to iumplement file uploading, removing and selecting in app.py. Can you help me understand what secret key, upload folder, database path, actually are... especially secret key. Also, how do I test that the app still starts? Just running app.py and following the link eh?
+
