@@ -74,3 +74,34 @@ def test_upload_without_file_keeps_page_working(tmp_path: Path) -> None:
     assert response.status_code == 200
     assert b"No documents yet." in response.data
     assert client.get("/documents").get_json() == []
+
+
+def test_upload_rejects_unsupported_extension(tmp_path: Path) -> None:
+    app = _make_test_app(tmp_path)
+    client = app.test_client()
+
+    response = client.post(
+        "/upload",
+        data={"file": (io.BytesIO(b"fake video data"), "movie.mp4")},
+        content_type="multipart/form-data",
+        follow_redirects=True,
+    )
+
+    assert response.status_code == 200
+    assert b"No documents yet." in response.data
+    assert client.get("/documents").get_json() == []
+
+
+def test_upload_rejects_files_over_20mb(tmp_path: Path) -> None:
+    app = _make_test_app(tmp_path)
+    client = app.test_client()
+
+    oversized_payload = b"x" * ((20 * 1024 * 1024) + 1)
+    response = client.post(
+        "/upload",
+        data={"file": (io.BytesIO(oversized_payload), "huge.pdf")},
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 413
+    assert client.get("/documents").get_json() == []
