@@ -341,3 +341,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 22:18
 - **Prompt**: Oh shit I forgot about pytest lmao
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 22:26
+- **Prompt**: How's it looking so far? Is this what you meant? I passed in the tmp_path and changed the paths of the upload and database folders to be under tmp_path
