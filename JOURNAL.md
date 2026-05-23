@@ -437,3 +437,8 @@
 - **Hook Version**: 1.02
 - **Date**: 24-05-2026 00:06
 - **Prompt**: I'm guessing ALLOWED_EXTENSIONS would be a set like ytou have just written, but how do i write the MAX_CONTENT_LENGTH? If I wanted 20MB max for instance, what do I write? 20? 20,000? Something else?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 00:07
+- **Prompt**: Thanks. Is 20MB too big or too small? Or just right?
