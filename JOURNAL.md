@@ -160,3 +160,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 16:11
 - **Prompt**: Are all these libraries necessary? Why not just stick to flask, pathlib and sys. What is the difference between os and sys? Also, what is werkzeug? Never heard of it.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 16:17
+- **Prompt**: Alright, let's put this on hold for now and shift our focus to storage.py. All that SQL stuff should be implemented there not app.py. Give me a small breakdown on how to approach the current stubs. I know it's mostly just SQL commands but I'm a bit rusty y'know. Also, how does this connect with the paths we established in config.py? I'm guessing the answer to that question is even more obscure libraries I have never heard about, right?...
