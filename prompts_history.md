@@ -151,3 +151,6 @@
 ### 23-05-2026 18:32
 - **Prompt**: Based on #file:betterPlan.md how much of my part have I (Kevin) completed. What's next?
 
+### 23-05-2026 18:38
+- **Prompt**: To make sure my app.py is working, I want to slightly modify index.html to show the maybe a list of documents that can be seleceted or deleted. How does Jinja help here? What even is jinja? Just a simple page, with a form perhaps. I need a plan outline for this task. Include whatever you deem necessary. Again, no overkill.
+
