@@ -306,3 +306,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 18:47
 - **Prompt**: Oh, I get it. "base". So basically Jinja is like adding coding to html? And we're usingit to loop through the documents... Damn.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 18:49
+- **Prompt**: Implement the Jinja in index.html, extend base.html and leave some stubs for me to complete
