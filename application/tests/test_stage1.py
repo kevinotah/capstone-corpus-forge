@@ -1,9 +1,14 @@
 from __future__ import annotations
 
 import io
+import sqlite3
+import uuid
 from pathlib import Path
 
+import pytest
+
 from application.app import create_app
+from application.storage import DocumentStore
 
 
 def _make_test_app(tmp_path: Path):
@@ -108,3 +113,40 @@ def test_upload_rejects_files_over_20mb(tmp_path: Path) -> None:
     assert response.status_code == 200
     assert b"too large" in response.data.lower()
     assert client.get("/documents").get_json() == []
+
+
+def test_save_document_cleans_up_when_database_insert_fails(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    store = DocumentStore(tmp_path, tmp_path / "data" / "metadata.sqlite")
+    original_connect = store._connect
+
+    fixed_document_id = uuid.UUID("12345678-1234-5678-1234-567812345678")
+    monkeypatch.setattr("application.storage.uuid.uuid4", lambda: fixed_document_id)
+
+    class FailingConnection:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+        def execute(self, statement, parameters=None):
+            # fail only when the metadata INSERT happens; this simulates a DB write error
+            if "INSERT INTO documents" in statement:
+                raise sqlite3.OperationalError("forced database failure")
+            return None
+
+        def commit(self):
+            return None
+
+    monkeypatch.setattr(store, "_connect", lambda: FailingConnection())
+
+    expected_path = tmp_path / "uploads" / f"{fixed_document_id}-sample.txt"
+
+    with pytest.raises(sqlite3.OperationalError):
+        store.save_document("sample.txt", b"hello world")
+
+    # the file write happened first, but the database failed, so the code should remove the file again
+    assert not expected_path.exists()
+
+    monkeypatch.setattr(store, "_connect", original_connect)
+    assert store.list_documents() == []
