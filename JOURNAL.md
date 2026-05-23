@@ -220,3 +220,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 17:03
 - **Prompt**: I need a yes or no. For a bare bones implementation of the project, is my current implementation of storage.py sufficient?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 17:11
+- **Prompt**: Great. Committed. Pushed. Now, back to app.py. Several thingd to be done: I have to load the config settings, basically pointing to the right folders. Right?  Have anything to add to this?
