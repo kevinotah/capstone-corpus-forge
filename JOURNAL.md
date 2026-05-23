@@ -460,3 +460,11 @@
 - **Hook Version**: 1.02
 - **Date**: 24-05-2026 00:22
 - **Prompt**: I have now "wired" them into app.py as you said... I also added a small check for filenames so they can be rejected early. Check the files involved and report back please
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 00:30
+- **Prompt**: Reviewed the new upload validation wiring in `application/app.py` against `application/config.py` and `application/tests/test_stage1.py`.
+- **Changes Made**: No code changes.
+- **Summary**: The config values are now present in `app.py`, and the early filename filter is conceptually correct. The remaining gap is test coverage for the new rejection paths: oversized uploads and disallowed filenames/extensions are not exercised yet. The current happy-path tests still pass, but they do not prove the new guard rails.
+- **Rationale**: Validation is only as strong as its rejection-path tests, so those should be added next.
