@@ -481,3 +481,8 @@
 - **Hook Version**: 1.02
 - **Date**: 24-05-2026 00:31
 - **Prompt**: Tests again? Bruh, I'm tired af. I've been at this since afternoon. I hand over the task of writing the tests to you. Write tests for extensions that are not supported and for sizes above 20MB since those were the retrictions/validation I implemented. Have anything else in mind? Go ahead and implement it if you deem it fit. Put them in the same test file as before #file:test_stage1.py. I think I'm going to sleep. Also, after this, is there anything else I have to do, as per #file:betterPlan.md ?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 00:41
+- **Prompt**: I need a more detailed, 3-way-split format of what is left to do for Stage 1 of the project just like in the #file:betterPlan.md file. Class them under each of the contributors. If any contributor doesn's have anything left to do, indicate so.  Also, based on the current state of the entire project, give me a brief but detailed Stage 2 outline on what would need to be done.
