@@ -175,3 +175,6 @@
 ### 23-05-2026 22:09
 - **Prompt**: Now, I'm trying to write tests for the actions I implemented, like the upload, select delete in app.py.   What are some cases I should keep in mind while making these implementations? I'm already thinking of testing uploading huge files for instance. Is this a good place to start? What else do you have in mind?
 
+### 23-05-2026 22:11
+- **Prompt**: Great, those are good. Now, where to start... Testing is one area I really need to improve in
+
