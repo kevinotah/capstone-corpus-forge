@@ -157,3 +157,6 @@
 ### 23-05-2026 18:39
 - **Prompt**: Add the following todos to the session plan: 1) Create a minimal templates/index.html Jinja page that lists documents and provides upload/select/delete forms; 2) Update templates/static as needed (styles optional); 3) Manual smoke test: run the app and verify upload, list, select, delete; 4) (Optional) Add a small test that posts a file and verifies listing and deletion. Mark all as not-started. Return the updated todo list.
 
+### 23-05-2026 18:44
+- **Prompt**: What do I even do with base.html?
+
