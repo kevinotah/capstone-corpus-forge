@@ -110,3 +110,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 15:14
 - **Prompt**: What are we trying to achive here?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 15:18
+- **Prompt**: Since these are config files, why not just add them to a config file under application and then point to them in app.py?
