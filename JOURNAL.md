@@ -516,3 +516,8 @@
 - **Hook Version**: 1.02
 - **Date**: 24-05-2026 01:13
 - **Prompt**: I still don't really understand what a DB-failure test does... Explain in detail.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 01:14
+- **Prompt**: So what are the steps involved?
