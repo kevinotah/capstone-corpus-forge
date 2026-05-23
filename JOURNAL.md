@@ -147,6 +147,17 @@
 - **Prompt**: So the specific path is better?
 
 ### **New Interaction**
+- **Agent Version**: 2.3
+- **Date**: 23-05-2026 16:00
+- **User**: Kevin
+- **Prompt**: I've tried, I just can't get it working. I'm not too good at Flask, I'm going to need stubs in app.py
+- **CoPilot Mode**: Edit
+- **CoPilot Model**: GPT-5.4 mini
+- **Socratic Mode**: ON
+- **Changes Made**: Reworked `application/app.py` into a beginner-friendly scaffold with config, store wiring, and route stubs for index/upload/select/delete.
+- **Context and Reasons for Changes**: User asked for simple stubs instead of a full Flask implementation, so the app now shows where each piece belongs without forcing a complete route implementation.
+
+### **New Interaction**
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 16:01
 - **Prompt**: Using pathlib, and based on my implementation in config.py, how do I point to the right folders/files in app.py
@@ -245,3 +256,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 17:52
 - **Prompt**: I've tried, I just can't get it working. I'm not too good at Flask, I'm going to need stubs in app.py
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 18:09
+- **Prompt**: Review app.py now

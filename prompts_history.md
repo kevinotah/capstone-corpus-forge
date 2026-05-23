@@ -133,3 +133,6 @@
 ### 23-05-2026 17:52
 - **Prompt**: I've tried, I just can't get it working. I'm not too good at Flask, I'm going to need stubs in app.py
 
+### 23-05-2026 18:09
+- **Prompt**: Review app.py now
+
