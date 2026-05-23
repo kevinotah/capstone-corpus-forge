@@ -88,3 +88,6 @@
 ### 23-05-2026 16:21
 - **Prompt**: No way I know how to do all that... Alright, how about this. Write stubs for me to comlete. I will need guidance. I am not looking to copy and paste. I want to write code myself. But deal with all the library stuff yourself.
 
+### 23-05-2026 16:24
+- **Prompt**: PLEASE NO WERKZEUG!
+
