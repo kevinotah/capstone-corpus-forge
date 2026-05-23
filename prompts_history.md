@@ -139,3 +139,6 @@
 ### 23-05-2026 18:12
 - **Prompt**: So what are your suggestions? Again, this is a school project. Don't overkill.
 
+### 23-05-2026 18:14
+- **Prompt**: Explain to me what is happening under each decorator (@)
+
