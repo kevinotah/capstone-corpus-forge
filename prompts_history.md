@@ -73,3 +73,6 @@
 ### 23-05-2026 15:43
 - **Prompt**: So the specific path is better?
 
+### 23-05-2026 16:01
+- **Prompt**: Using pathlib, and based on my implementation in config.py, how do I point to the right folders/files in app.py
+
