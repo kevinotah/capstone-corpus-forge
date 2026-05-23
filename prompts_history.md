@@ -190,3 +190,6 @@
 ### 23-05-2026 22:31
 - **Prompt**: Damn, nice. However, it seems to me this isn't all that is entailed. Also, I'm sure there are some libraries necessary for testing. Which ones? And outline a next step hint plan. Not the full implementation.
 
+### 23-05-2026 22:32
+- **Prompt**: What happens when a test fails?
+
