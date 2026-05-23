@@ -150,3 +150,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 16:01
 - **Prompt**: Using pathlib, and based on my implementation in config.py, how do I point to the right folders/files in app.py
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 16:04
+- **Prompt**: Bruh, wtf? I don't understand any of that... Explain in detail please
