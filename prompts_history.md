@@ -241,3 +241,6 @@
 ### 24-05-2026 00:22
 - **Prompt**: I have now "wired" them into app.py as you said... I also added a small check for filenames so they can be rejected early. Check the files involved and report back please
 
+### 24-05-2026 00:31
+- **Prompt**: Tests again? Bruh, I'm tired af. I've been at this since afternoon. I hand over the task of writing the tests to you. Write tests for extensions that are not supported and for sizes above 20MB since those were the retrictions/validation I implemented. Have anything else in mind? Go ahead and implement it if you deem it fit. Put them in the same test file as before #file:test_stage1.py. I think I'm going to sleep. Also, after this, is there anything else I have to do, as per #file:betterPlan.md ?
+
