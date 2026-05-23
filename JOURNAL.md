@@ -140,3 +140,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 15:42
 - **Prompt**: I meant *config* I put two asterisks either side of it, but the editor is showing it as emboldened text
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 15:43
+- **Prompt**: So the specific path is better?
