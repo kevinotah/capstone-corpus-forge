@@ -205,3 +205,6 @@
 ### 23-05-2026 23:08
 - **Prompt**: It never stops does it? No matter how much I implement, you'll still come up with something else wontcha?
 
+### 23-05-2026 23:11
+- **Prompt**: Okay, I assume this first test file is complete (after one damn hour), go through it, assess its efficiency and run them. pytest -q right?
+
