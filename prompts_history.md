@@ -160,3 +160,6 @@
 ### 23-05-2026 18:44
 - **Prompt**: What do I even do with base.html?
 
+### 23-05-2026 18:47
+- **Prompt**: Oh, I get it. "base". So basically Jinja is like adding coding to html? And we're usingit to loop through the documents... Damn.
+
