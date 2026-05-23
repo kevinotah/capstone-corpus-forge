@@ -226,3 +226,6 @@
 ### 23-05-2026 23:46
 - **Prompt**: So, if I got you correctly, you made it so all the filenames have a predictable format? Basically?
 
+### 24-05-2026 00:02
+- **Prompt**: Nice, and yes, the tests are needed as well. Next, I'm focusing on the validation part. I want to set a maximum upload size and allow only certain (obvious) file types. Don't want someone uploading a 10GB mp4 file now, do we? Basically, the app should be able to reject "bad" upload attempts before saving. How do I approach this?
+
