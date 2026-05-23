@@ -64,3 +64,6 @@
 ### 23-05-2026 15:38
 - **Prompt**: Look at my config.py implementation and tell me what's good
 
+### 23-05-2026 15:41
+- **Prompt**: I added "*conig*" to .gitignore. Good?
+
