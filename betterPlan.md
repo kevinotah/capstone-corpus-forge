@@ -1,4 +1,4 @@
-# Project breakdown
+j# Project breakdown
 Essentially, it is just a NotebookLM copy
 
 ## Layer 1
@@ -33,3 +33,27 @@ Essentially, it is just a NotebookLM copy
 We will use Flask for backend. Jinja2 for templating and SQLite for database. File storage can be done inside the disk 
 ## Stage 1:
 First we might want to implement file uploading, removing and selecting to pass on AI. No AI features just yet. We also HAVE to make sure that the file STAYS even if we refresh the page.
+
+## Team Assignment (3-way split)
+To keep work balanced for a 3-person team, the plan below divides the project into three focused, roughly equal areas. Each member owns their area end-to-end for Stage 1 and will collaborate on integration.
+
+- Kevin — Backend & Storage
+    - Implement Flask backend endpoints for file upload, list, delete, and selection.
+    - Implement persistence: store uploaded files on disk and metadata in SQLite.
+    - Provide APIs for selecting which documents AI can use (stub, no AI calls in Stage 1).
+    - Add minimal validation and error handling (file size, type checks) and unit tests for the endpoints.
+
+- Cindy — Frontend & UX
+    - Implement upload UI and document management pages using Jinja2 templates.
+    - Build views for listing documents, selecting documents for AI use, and previewing uploaded files.
+    - Add client-side validation and friendly UX for upload/remove actions.
+    - Create simple styling in `static/styles.css` and ensure templates are mobile-friendly.
+
+- Duc — DevOps, QA & Stage-1 Integrations
+    - Create app run instructions, environment setup, and a lightweight `docker-compose` or run script for local testing.
+    - Implement persistence checks (ensure files survive server restarts) and write integration tests that exercise upload → list → delete flows.
+    - Own Stage-1 acceptance testing and test data; help glue frontend and backend during integration.
+
+Notes on collaboration:
+- Integration: schedule a short integration sync after each member completes their Stage-1 tasks to verify end-to-end flows.
+- Layer 2 choice: the team agrees which extra challenge to implement; Duc can lead CI/tests while Kevin and Cindy implement the chosen feature.
