@@ -230,3 +230,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 17:21
 - **Prompt**: So I haven't done the main implementation yet, but I have added the necessary path imports. I need you to go through it and point out any and all flaws (but still keep i mind that this is a school project so don't be nitpicky)
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 17:26
+- **Prompt**: What are the next steps?
