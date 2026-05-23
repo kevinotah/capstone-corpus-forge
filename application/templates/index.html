@@ -5,27 +5,54 @@
 {% block content %}
   <section class="hero">
     <h1>Corpus Forge</h1>
-    <p>Stage 1 skeleton: upload, store, list, select, and delete documents.</p>
+    <p>Upload files, keep them on disk, and choose which ones the AI can use later.</p>
   </section>
 
   <section class="panel">
-    <h2>TODO</h2>
-    <ul>
-      <li>Build document upload form.</li>
-      <li>Load persisted documents from local storage.</li>
-      <li>Allow selecting documents for future AI features.</li>
-      <li>Implement delete and browse actions.</li>
-    </ul>
+    <h2>Upload</h2>
+    <form action="{{ url_for('upload_document') }}" method="post" enctype="multipart/form-data" class="upload-form">
+      <label for="file">Choose a file</label>
+      <input id="file" name="file" type="file" required>
+      <button type="submit">Upload</button>
+    </form>
   </section>
 
   <section class="panel">
     <h2>Documents</h2>
     {% if documents %}
-      <ul>
-        {% for document in documents %}
-          <li>{{ document }}</li>
-        {% endfor %}
-      </ul>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Size</th>
+              <th>Uploaded</th>
+              <th>Selected</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for document in documents %}
+              <tr>
+                <td>{{ document.name }}</td>
+                <td>{{ document.size }}</td>
+                <td>{{ document.uploaded_at }}</td>
+                <td>
+                  <form action="{{ url_for('select_document', document_id=document.id) }}" method="post">
+                    <input type="hidden" name="selected" value="{{ '0' if document.selected else '1' }}">
+                    <button type="submit">{{ 'Selected' if document.selected else 'Select' }}</button>
+                  </form>
+                </td>
+                <td>
+                  <form action="{{ url_for('delete_document', document_id=document.id) }}" method="post">
+                    <button type="submit">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     {% else %}
       <p>No documents yet.</p>
     {% endif %}
