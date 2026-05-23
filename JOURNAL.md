@@ -155,3 +155,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 16:04
 - **Prompt**: Bruh, wtf? I don't understand any of that... Explain in detail please
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 16:11
+- **Prompt**: Are all these libraries necessary? Why not just stick to flask, pathlib and sys. What is the difference between os and sys? Also, what is werkzeug? Never heard of it.
