@@ -165,3 +165,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 16:17
 - **Prompt**: Alright, let's put this on hold for now and shift our focus to storage.py. All that SQL stuff should be implemented there not app.py. Give me a small breakdown on how to approach the current stubs. I know it's mostly just SQL commands but I'm a bit rusty y'know. Also, how does this connect with the paths we established in config.py? I'm guessing the answer to that question is even more obscure libraries I have never heard about, right?...
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 16:21
+- **Prompt**: No way I know how to do all that... Alright, how about this. Write stubs for me to comlete. I will need guidance. I am not looking to copy and paste. I want to write code myself. But deal with all the library stuff yourself.
