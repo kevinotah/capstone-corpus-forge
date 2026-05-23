@@ -447,3 +447,16 @@
 - **Hook Version**: 1.02
 - **Date**: 24-05-2026 00:10
 - **Prompt**: I have added the two new config variables in config.py. Check to see if its good
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 00:20
+- **Prompt**: Reviewed `application/config.py` and `application/app.py` for upload validation wiring.
+- **Changes Made**: No code changes.
+- **Summary**: The config values are reasonable, but the upload route is not yet enforcing `MAX_CONTENT_LENGTH` or `ALLOWED_EXTENSIONS`. The settings exist in `application/config.py`, but they still need to be wired into `application/app.py` before they actually protect uploads.
+- **Rationale**: Config alone does not block bad uploads; the request handler must use those values.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 00:22
+- **Prompt**: I have now "wired" them into app.py as you said... I also added a small check for filenames so they can be rejected early. Check the files involved and report back please

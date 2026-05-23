@@ -238,3 +238,6 @@
 ### 24-05-2026 00:10
 - **Prompt**: I have added the two new config variables in config.py. Check to see if its good
 
+### 24-05-2026 00:22
+- **Prompt**: I have now "wired" them into app.py as you said... I also added a small check for filenames so they can be rejected early. Check the files involved and report back please
+
