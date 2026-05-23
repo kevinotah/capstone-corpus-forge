@@ -259,3 +259,6 @@
 ### 24-05-2026 00:56
 - **Prompt**: I'll leave it up to you to add comments in the necessary files. Also, I want the app to show a message when a validation is triggered (big file, unsupported extension) instead of just refreshing. I'leave that up to you as well. I have manually verified the backend persistence. I just need the messages. As for the DB-failure test, explain to me what it entails. What are we trying to achieve with it?
 
+### 24-05-2026 01:07
+- **Prompt**: Again, what is the updated left-to-do-for-stage-1 now?
+
