@@ -106,3 +106,6 @@
 ### 23-05-2026 16:57
 - **Prompt**: How about now? Also, look at the config.py file
 
+### 23-05-2026 16:59
+- **Prompt**: Why do I have to make config.py read SECRET_KEY from env? I only put it in .gitignore
+
