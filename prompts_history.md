@@ -142,3 +142,6 @@
 ### 23-05-2026 18:14
 - **Prompt**: Explain to me what is happening under each decorator (@)
 
+### 23-05-2026 18:19
+- **Prompt**: Is there no way to know that app.py is working as intended if index.html hasn't been implemented?
+

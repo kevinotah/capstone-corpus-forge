@@ -271,3 +271,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 18:14
 - **Prompt**: Explain to me what is happening under each decorator (@)
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 18:19
+- **Prompt**: Is there no way to know that app.py is working as intended if index.html hasn't been implemented?
