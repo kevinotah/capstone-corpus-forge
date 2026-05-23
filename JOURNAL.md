@@ -291,3 +291,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 18:38
 - **Prompt**: To make sure my app.py is working, I want to slightly modify index.html to show the maybe a list of documents that can be seleceted or deleted. How does Jinja help here? What even is jinja? Just a simple page, with a form perhaps. I need a plan outline for this task. Include whatever you deem necessary. Again, no overkill.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 18:39
+- **Prompt**: Add the following todos to the session plan: 1) Create a minimal templates/index.html Jinja page that lists documents and provides upload/select/delete forms; 2) Update templates/static as needed (styles optional); 3) Manual smoke test: run the app and verify upload, list, select, delete; 4) (Optional) Add a small test that posts a file and verifies listing and deletion. Mark all as not-started. Return the updated todo list.
