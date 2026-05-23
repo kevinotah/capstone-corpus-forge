@@ -366,3 +366,16 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 23:01
 - **Prompt**: Review the tests now. How many percent of the way there am I?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 23:15
+- **Prompt**: Reviewed `application/tests/test_stage1.py`; updated todo list status for testing.
+- **Changes Made**: Adjusted session todo list (marked `Run unit tests` in-progress). No source code edits.
+- **Summary**: The test file contains two integration-style tests covering upload → list → select → delete and an empty-upload case. Core happy-path flows are implemented in tests; edge cases and robustness tests (filename sanitization, large files, atomic write failures, multiple documents) are not covered yet.
+- **Rationale**: Prepare to run pytest locally and add focused edge-case tests next.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 23:06
+- **Prompt**: Alhamdullilah
