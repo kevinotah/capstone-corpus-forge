@@ -235,3 +235,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 17:26
 - **Prompt**: What are the next steps?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 17:26
+- **Prompt**: Update the session todo list with the next actionable steps for the project: instantiate DocumentStore in app.py, implement upload/select/delete routes using the store, add filename sanitization and atomic writes in storage.py, ensure config loading in application/app.py, add simple tests to exercise save->list->delete, update README with run instructions and .gitignore entries, and run local test. Mark them as not-started except any already done. Return the updated todo list.
