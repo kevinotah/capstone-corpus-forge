@@ -101,7 +101,10 @@ def test_upload_rejects_files_over_20mb(tmp_path: Path) -> None:
         "/upload",
         data={"file": (io.BytesIO(oversized_payload), "huge.pdf")},
         content_type="multipart/form-data",
+        follow_redirects=True,
     )
 
-    assert response.status_code == 413
+    # app now flashes a friendly message and redirects to index on oversized uploads
+    assert response.status_code == 200
+    assert b"too large" in response.data.lower()
     assert client.get("/documents").get_json() == []

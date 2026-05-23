@@ -12,6 +12,14 @@ from typing import Any
 
 
 class DocumentStore:
+    """Simple document store handling filesystem writes and SQLite metadata.
+
+    Responsibilities:
+    - Store uploaded file bytes under `uploads/` using a UUID-prefixed sanitized filename.
+    - Persist metadata in an SQLite database under `data/metadata.sqlite`.
+    - Perform atomic writes and cleanup on failure to avoid orphan files.
+    """
+
     def __init__(self, root_path: str | Path, database_path: str | Path | None = None) -> None:
         self.root_path = Path(root_path)
         self.uploads_path = self.root_path / "uploads"
@@ -41,7 +49,7 @@ class DocumentStore:
         orig_name = Path(file_name).name
         name = re.sub(r"[^\w.\-]+", "_", orig_name, flags=re.UNICODE).strip("_ ")
         if not name or name.startswith("."):
-            name = f"file"
+            name = "file"
 
         # limit base length to avoid filesystem limits
         base, ext = os.path.splitext(name)

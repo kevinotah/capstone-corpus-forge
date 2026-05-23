@@ -6,8 +6,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask import Flask, jsonify, redirect, flash, render_template, request, url_for
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import RequestEntityTooLarge
 
 from application import config as default_config
 from application.storage import DocumentStore
@@ -37,14 +38,35 @@ def create_app(test_config: dict | None = None) -> Flask:
     def upload_document():
         uploaded_file = request.files.get("file")
         if uploaded_file is None or uploaded_file.filename == "":
+            flash("No file selected for upload.")
             return redirect(url_for("index"))
 
         file_name = uploaded_file.filename or ""
         safe_name = secure_filename(file_name)
-        if not safe_name or not allowed_file(safe_name):
+        if not safe_name:
+            flash("Invalid filename.")
             return redirect(url_for("index"))
 
-        store.save_document(safe_name, uploaded_file.read())
+        if not allowed_file(safe_name):
+            flash(f"Unsupported file type: {file_name}")
+            return redirect(url_for("index"))
+
+        try:
+            doc = store.save_document(safe_name, uploaded_file.read())
+            flash(f"Uploaded {doc['name']}")
+        except Exception as exc:
+            flash(f"Failed to save file: {exc}")
+
+        return redirect(url_for("index"))
+
+    @app.errorhandler(RequestEntityTooLarge)
+    def handle_file_too_large(error):
+        max_bytes = app.config.get("MAX_CONTENT_LENGTH")
+        try:
+            max_mb = f"{max_bytes // (1024*1024)} MB"
+        except Exception:
+            max_mb = str(max_bytes)
+        flash(f"Uploaded file is too large (max: {max_mb}).")
         return redirect(url_for("index"))
 
     @app.get("/documents")
