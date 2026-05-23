@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import mimetypes
+import os
+import re
 import sqlite3
+import tempfile
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -33,36 +36,73 @@ class DocumentStore:
 
     def save_document(self, file_name: str, content: bytes) -> dict[str, Any]:
         document_id = str(uuid.uuid4())
-        safe_name = Path(file_name).name
+
+        # sanitize filename: keep alphanumerics, dot, dash, underscore; collapse others to '_'
+        orig_name = Path(file_name).name
+        name = re.sub(r"[^\w.\-]+", "_", orig_name, flags=re.UNICODE).strip("_ ")
+        if not name or name.startswith("."):
+            name = f"file"
+
+        # limit base length to avoid filesystem limits
+        base, ext = os.path.splitext(name)
+        base = base[:200]
+        safe_name = f"{base}{ext.lower()}"
+
         stored_name = f"{document_id}-{safe_name}"
         stored_path = self.uploads_path / stored_name
-        stored_path.write_bytes(content)
 
-        uploaded_at = datetime.now(timezone.utc).isoformat()
-        mime_type = mimetypes.guess_type(safe_name)[0] or "application/octet-stream"
-        size = len(content)
+        # atomic write to temporary file in same directory
+        tmp_fd, tmp_path_str = tempfile.mkstemp(prefix=".", dir=str(self.uploads_path))
+        try:
+            with os.fdopen(tmp_fd, "wb") as tmp_file:
+                tmp_file.write(content)
+                tmp_file.flush()
+                os.fsync(tmp_file.fileno())
 
-        document = {
-            "id": document_id,
-            "name": safe_name,
-            "path": str(stored_path),
-            "size": size,
-            "mime": mime_type,
-            "uploaded_at": uploaded_at,
-            "selected": 0,
-        }
+            # atomic move into final destination
+            os.replace(tmp_path_str, str(stored_path))
 
-        with self._connect() as connection:
-            connection.execute(
-                """
-                INSERT INTO documents (id, name, path, size, mime, uploaded_at, selected)
-                VALUES (:id, :name, :path, :size, :mime, :uploaded_at, :selected)
-                """,
-                document,
-            )
-            connection.commit()
+            uploaded_at = datetime.now(timezone.utc).isoformat()
+            mime_type = mimetypes.guess_type(safe_name)[0] or "application/octet-stream"
+            size = len(content)
 
-        return document
+            document = {
+                "id": document_id,
+                "name": safe_name,
+                "path": str(stored_path),
+                "size": size,
+                "mime": mime_type,
+                "uploaded_at": uploaded_at,
+                "selected": 0,
+            }
+
+            # insert metadata; if this fails, remove the stored file to avoid orphaned files
+            try:
+                with self._connect() as connection:
+                    connection.execute(
+                        """
+                        INSERT INTO documents (id, name, path, size, mime, uploaded_at, selected)
+                        VALUES (:id, :name, :path, :size, :mime, :uploaded_at, :selected)
+                        """,
+                        document,
+                    )
+                    connection.commit()
+            except Exception:
+                # cleanup file on DB failure
+                try:
+                    if stored_path.exists():
+                        stored_path.unlink()
+                finally:
+                    raise
+
+            return document
+        finally:
+            # ensure temp file removed if something went wrong before replace
+            if os.path.exists(tmp_path_str):
+                try:
+                    os.remove(tmp_path_str)
+                except Exception:
+                    pass
 
     def delete_document(self, document_id: str) -> None:
         document = self._get_document(document_id)
