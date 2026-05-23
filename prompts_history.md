@@ -247,3 +247,6 @@
 ### 24-05-2026 00:41
 - **Prompt**: I need a more detailed, 3-way-split format of what is left to do for Stage 1 of the project just like in the #file:betterPlan.md file. Class them under each of the contributors. If any contributor doesn's have anything left to do, indicate so.  Also, based on the current state of the entire project, give me a brief but detailed Stage 2 outline on what would need to be done.
 
+### 24-05-2026 00:44
+- **Prompt**: Alright, forget aout Stage2 for now. Just focus on what's left in Stage 1. Be sure that it's correct based on the initial 3-way split in #file:betterPlan.md
+
