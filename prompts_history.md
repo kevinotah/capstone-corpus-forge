@@ -130,3 +130,6 @@
 ### 23-05-2026 17:26
 - **Prompt**: Update the session todo list with the next actionable steps for the project: instantiate DocumentStore in app.py, implement upload/select/delete routes using the store, add filename sanitization and atomic writes in storage.py, ensure config loading in application/app.py, add simple tests to exercise save->list->delete, update README with run instructions and .gitignore entries, and run local test. Mark them as not-started except any already done. Return the updated todo list.
 
+### 23-05-2026 17:52
+- **Prompt**: I've tried, I just can't get it working. I'm not too good at Flask, I'm going to need stubs in app.py
+
