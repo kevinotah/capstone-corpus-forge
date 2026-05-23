@@ -331,3 +331,8 @@
 - **Hook Version**: 1.02
 - **Date**: 23-05-2026 22:11
 - **Prompt**: Great, those are good. Now, where to start... Testing is one area I really need to improve in
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 23-05-2026 22:17
+- **Prompt**: What would tmp_path be? How do you even run the tests if they're just a bunch of defs
