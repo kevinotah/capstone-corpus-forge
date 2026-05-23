@@ -424,3 +424,16 @@
 - **Hook Version**: 1.02
 - **Date**: 24-05-2026 00:02
 - **Prompt**: Nice, and yes, the tests are needed as well. Next, I'm focusing on the validation part. I want to set a maximum upload size and allow only certain (obvious) file types. Don't want someone uploading a 10GB mp4 file now, do we? Basically, the app should be able to reject "bad" upload attempts before saving. How do I approach this?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 00:15
+- **Prompt**: Discussed upload validation approach: max size, allowed types, and early rejection before saving.
+- **Changes Made**: No code changes; updated todo tracking for validation focus.
+- **Summary**: Validation should happen as early as possible in the upload route, with server-side checks for file presence, extension/type, and maximum size before calling storage. The storage layer can still defend itself, but the request layer should reject obviously bad uploads first.
+- **Rationale**: Keep large or unsupported files out of the save path and fail fast with clear errors.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 00:06
+- **Prompt**: I'm guessing ALLOWED_EXTENSIONS would be a set like ytou have just written, but how do i write the MAX_CONTENT_LENGTH? If I wanted 20MB max for instance, what do I write? 20? 20,000? Something else?

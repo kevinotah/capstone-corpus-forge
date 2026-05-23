@@ -229,3 +229,6 @@
 ### 24-05-2026 00:02
 - **Prompt**: Nice, and yes, the tests are needed as well. Next, I'm focusing on the validation part. I want to set a maximum upload size and allow only certain (obvious) file types. Don't want someone uploading a 10GB mp4 file now, do we? Basically, the app should be able to reject "bad" upload attempts before saving. How do I approach this?
 
+### 24-05-2026 00:06
+- **Prompt**: I'm guessing ALLOWED_EXTENSIONS would be a set like ytou have just written, but how do i write the MAX_CONTENT_LENGTH? If I wanted 20MB max for instance, what do I write? 20? 20,000? Something else?
+
