@@ -253,3 +253,6 @@
 ### 24-05-2026 00:47
 - **Prompt**: Is GitHub actions necessary? This is a svchool project and we are on a tight deadline. Review it with this in mind
 
+### 24-05-2026 00:47
+- **Prompt**: What is the updated left-to-do-for-stage-1 now?
+
