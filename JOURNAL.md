@@ -534,3 +534,8 @@
 - **Changes Made**: Added a test that monkeypatches the document store connection so the SQLite INSERT raises `OperationalError`, then checks that the uploaded file is removed and the database remains empty. Also imported `pytest`, `sqlite3`, `uuid`, and `DocumentStore` for the test.
 - **Summary**: The test intentionally forces the database write to fail so it can verify cleanup behavior. The overall pytest run still passes because the test expects the failure and asserts the cleanup result.
 - **Rationale**: Prove the app does not leave orphan files when metadata persistence fails after the file write succeeded.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 14:21
+- **Prompt**: i want to add client-side validation. help me by adding TODOs that i can complete myself. also guide me by explaining what to step by step
