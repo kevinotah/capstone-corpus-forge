@@ -589,3 +589,8 @@
 - **Hook Version**: 1.02
 - **Date**: 24-05-2026 16:02
 - **Prompt**: WTF is wrong with app.py. Why don't you listen to me
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 16:03
+- **Prompt**: File "c:\Users\User\OneDrive - EPITA\Bureau\Courses\2nd Semester\AI for software eng\Codes\capstone-corpus-forge\application\app.py", line 7, in <module>     from . import config as default_config ImportError: attempted relative import with no known parent package
