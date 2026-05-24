@@ -286,3 +286,6 @@
 ### 24-05-2026 15:22
 - **Prompt**: Can you check if i am on the right track ? if not tell me where i went wrong and how i can handle it
 
+### 24-05-2026 15:48
+- **Prompt**: i don't understand for init.py, pytest.ini, and requirements.txt. Especially the first 2. How is it helpful.
+
