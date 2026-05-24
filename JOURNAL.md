@@ -594,3 +594,8 @@
 - **Hook Version**: 1.02
 - **Date**: 24-05-2026 16:03
 - **Prompt**: File "c:\Users\User\OneDrive - EPITA\Bureau\Courses\2nd Semester\AI for software eng\Codes\capstone-corpus-forge\application\app.py", line 7, in <module>     from . import config as default_config ImportError: attempted relative import with no known parent package
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 24-05-2026 21:27
+- **Prompt**: Also i have to create a preview.html in the templates folder. CREATE A FILE WITH JUST THE TODOs. I SAID JUST THE TODOs !!!!!!!!!!!!!!
