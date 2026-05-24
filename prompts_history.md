@@ -289,3 +289,6 @@
 ### 24-05-2026 15:48
 - **Prompt**: i don't understand for init.py, pytest.ini, and requirements.txt. Especially the first 2. How is it helpful.
 
+### 24-05-2026 15:54
+- **Prompt**: i think it is preferable to have 1 requirements.txt. so i will just modify the existing ones so it fits
+
