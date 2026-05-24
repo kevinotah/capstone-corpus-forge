@@ -274,3 +274,6 @@
 ### 24-05-2026 14:21
 - **Prompt**: i want to add client-side validation. help me by adding TODOs that i can complete myself. also guide me by explaining what to step by step
 
+### 24-05-2026 14:24
+- **Prompt**: add the TODOs in the various files so i can complete them
+
