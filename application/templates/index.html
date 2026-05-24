@@ -10,10 +10,24 @@
 
   <section class="panel">
     <h2>Upload</h2>
-    <form action="{{ url_for('upload_document') }}" method="post" enctype="multipart/form-data" class="upload-form">
+    <form
+      action="{{ url_for('upload_document') }}"
+      method="post"
+      enctype="multipart/form-data"
+      class="upload-form"
+      data-max-size="{{ max_content_length }}"
+    >
       <label for="file">Choose a file</label>
-      <input id="file" name="file" type="file" required>
-      <button type="submit">Upload</button>
+      <input
+        id="file"
+        name="file"
+        type="file"
+        required
+        accept="{% for ext in allowed_extensions %}.{{ ext }}{% if not loop.last %},{% endif %}{% endfor %}"
+      >
+      <p class="muted">Allowed types: {{ allowed_extensions|join(', ') }}. Max size: {{ (max_content_length // (1024 * 1024)) }} MB.</p>
+      <p id="upload-feedback" class="form-feedback" aria-live="polite"></p>
+      <button type="submit" class="btn btn-primary">Upload</button>
     </form>
   </section>
 
@@ -34,18 +48,19 @@
           <tbody>
             {% for document in documents %}
               <tr>
-                <td>{{ document.name }}</td>
-                <td>{{ document.size }}</td>
-                <td>{{ document.uploaded_at }}</td>
-                <td>
+                <td data-label="Name">{{ document.name }}</td>
+                <td data-label="Size">{{ document.size }}</td>
+                <td data-label="Uploaded">{{ document.uploaded_at }}</td>
+                <td data-label="Selected">
                   <form action="{{ url_for('select_document', document_id=document.id) }}" method="post">
                     <input type="hidden" name="selected" value="{{ '0' if document.selected else '1' }}">
-                    <button type="submit">{{ 'Selected' if document.selected else 'Select' }}</button>
+                    <button type="submit" class="btn {{ 'btn-secondary' if document.selected else 'btn-primary' }}">{{ 'Selected' if document.selected else 'Select' }}</button>
                   </form>
                 </td>
-                <td>
-                  <form action="{{ url_for('delete_document', document_id=document.id) }}" method="post">
-                    <button type="submit">Delete</button>
+                <td data-label="Actions" class="actions-cell">
+                  <a class="btn btn-ghost" href="{{ url_for('preview_document', document_id=document.id) }}">Preview</a>
+                  <form action="{{ url_for('delete_document', document_id=document.id) }}" method="post" data-confirm="Delete {{ document.name }}? This cannot be undone.">
+                    <button type="submit" class="btn btn-danger">Delete</button>
                   </form>
                 </td>
               </tr>

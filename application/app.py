@@ -6,7 +6,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from flask import Flask, jsonify, redirect, flash, render_template, request, url_for
+from flask import Flask, abort, jsonify, redirect, flash, render_template, request, send_file, url_for
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 
@@ -73,6 +73,45 @@ def create_app(test_config: dict | None = None) -> Flask:
     def documents():
         return jsonify(store.list_documents()), 200
 
+    @app.get("/documents/<document_id>/raw")
+    def raw_document(document_id: str):
+        document = next((doc for doc in store.list_documents() if doc["id"] == document_id), None)
+        if document is None:
+            abort(404)
+
+        path = Path(document["path"])
+        if not path.exists():
+            abort(404)
+
+        return send_file(path, mimetype=document["mime"], as_attachment=False, download_name=document["name"])
+
+    @app.get("/documents/<document_id>/preview")
+    def preview_document(document_id: str):
+        document = next((doc for doc in store.list_documents() if doc["id"] == document_id), None)
+        if document is None:
+            flash("Document not found.")
+            return redirect(url_for("index"))
+
+        path = Path(document["path"])
+        if not path.exists():
+            flash("Document file is missing on disk.")
+            return redirect(url_for("index"))
+
+        is_image = document["mime"].startswith("image/")
+        text_preview = None
+        if document["mime"].startswith("text/") or document["name"].lower().endswith((".txt", ".md")):
+            try:
+                text_preview = path.read_text(encoding="utf-8", errors="replace")[:12000]
+            except OSError:
+                text_preview = "Preview unavailable for this file."
+
+        return render_template(
+            "preview.html",
+            document=document,
+            is_image=is_image,
+            text_preview=text_preview,
+        )
+
     @app.post("/documents/<document_id>/delete")
     def delete_document(document_id: str):
         store.delete_document(document_id)
@@ -88,7 +127,12 @@ def create_app(test_config: dict | None = None) -> Flask:
     @app.get("/")
     def index() -> str:
         documents = store.list_documents()
-        return render_template("index.html", documents=documents)
+        return render_template(
+            "index.html",
+            documents=documents,
+            allowed_extensions=sorted(app.config["ALLOWED_EXTENSIONS"]),
+            max_content_length=app.config["MAX_CONTENT_LENGTH"],
+        )
 
     return app
 
