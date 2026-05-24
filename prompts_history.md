@@ -283,3 +283,6 @@
 ### 24-05-2026 14:44
 - **Prompt**: go kill yourself!!
 
+### 24-05-2026 15:22
+- **Prompt**: Can you check if i am on the right track ? if not tell me where i went wrong and how i can handle it
+
