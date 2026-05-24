@@ -277,3 +277,6 @@
 ### 24-05-2026 14:24
 - **Prompt**: add the TODOs in the various files so i can complete them
 
+### 24-05-2026 14:40
+- **Prompt**: i didn't ask you to write the code for me. Are you okay ? Just the TODOs. JUST GIVE ME THE TODOs AND I WILL WRITE THE CODE MYSELF !!!!!!!!!!
+
