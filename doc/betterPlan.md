@@ -33,6 +33,12 @@ Essentially, it is just a NotebookLM copy
 We will use Flask for backend. Jinja2 for templating and SQLite for database. File storage can be done inside the disk 
 ## Stage 1:
 First we might want to implement file uploading, removing and selecting to pass on AI. No AI features just yet. We also HAVE to make sure that the file STAYS even if we refresh the page.
+## Stage 2:
+    - Add Rag / No-rag from lab 15 and use it as our main AI. It SHOULD be in a separate folder
+    - We would want to tackle generation by initially dumping everything into the AI
+    - Implement a Chat mode, Flashcard mode and quiz mode. We can add code review mode if the uploaded file is a code file instead
+    - Show AI token usage in a separate tab
+## Stage 3: Polishing
 
 ## Team Assignment (3-way split)
 To keep work balanced for a 3-person team, the plan below divides the project into three focused, roughly equal areas. Each member owns their area end-to-end for Stage 1 and will collaborate on integration.

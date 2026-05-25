@@ -1,0 +1,7 @@
+# Optional RAG deps — install only if you implement them
+# transformers>=4.0.0
+# faiss-cpu
+# sentence-transformers
+# openai (or other LLM client)
+
+# Keep this empty by default for Stage 2 skeleton
