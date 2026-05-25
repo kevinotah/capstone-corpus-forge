@@ -9,3 +9,8 @@
 - **Hook Version**: 1.02
 - **Date**: 25-05-2026 22:00
 - **Prompt**: We have done implementing basic file uploading. Do you have recommendations on what we should do next?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 25-05-2026 22:03
+- **Prompt**: i mean yeah no crap sherlock i gotta do delete. We already have removing, selecting and more. I suppose our next part is implementing AI right?
