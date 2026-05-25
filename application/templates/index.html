@@ -5,27 +5,69 @@
 {% block content %}
   <section class="hero">
     <h1>Corpus Forge</h1>
-    <p>Stage 1 skeleton: upload, store, list, select, and delete documents.</p>
+    <p>Upload files, keep them on disk, and choose which ones the AI can use later.</p>
   </section>
 
   <section class="panel">
-    <h2>TODO</h2>
-    <ul>
-      <li>Build document upload form.</li>
-      <li>Load persisted documents from local storage.</li>
-      <li>Allow selecting documents for future AI features.</li>
-      <li>Implement delete and browse actions.</li>
-    </ul>
+    <h2>Upload</h2>
+    <form
+      action="{{ url_for('upload_document') }}"
+      method="post"
+      enctype="multipart/form-data"
+      class="upload-form"
+      data-max-size="{{ max_content_length }}"
+    >
+      <label for="file">Choose a file</label>
+      <input
+        id="file"
+        name="file"
+        type="file"
+        required
+        accept="{% for ext in allowed_extensions %}.{{ ext }}{% if not loop.last %},{% endif %}{% endfor %}"
+      >
+      <p class="muted">Allowed types: {{ allowed_extensions|join(', ') }}. Max size: {{ (max_content_length // (1024 * 1024)) }} MB.</p>
+      <p id="upload-feedback" class="form-feedback" aria-live="polite"></p>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
   </section>
 
   <section class="panel">
     <h2>Documents</h2>
     {% if documents %}
-      <ul>
-        {% for document in documents %}
-          <li>{{ document }}</li>
-        {% endfor %}
-      </ul>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Size</th>
+              <th>Uploaded</th>
+              <th>Selected</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for document in documents %}
+              <tr>
+                <td data-label="Name">{{ document.name }}</td>
+                <td data-label="Size">{{ document.size }}</td>
+                <td data-label="Uploaded">{{ document.uploaded_at }}</td>
+                <td data-label="Selected">
+                  <form action="{{ url_for('select_document', document_id=document.id) }}" method="post">
+                    <input type="hidden" name="selected" value="{{ '0' if document.selected else '1' }}">
+                    <button type="submit" class="btn {{ 'btn-secondary' if document.selected else 'btn-primary' }}">{{ 'Selected' if document.selected else 'Select' }}</button>
+                  </form>
+                </td>
+                <td data-label="Actions" class="actions-cell">
+                  <a class="btn btn-ghost" href="{{ url_for('preview_document', document_id=document.id) }}">Preview</a>
+                  <form action="{{ url_for('delete_document', document_id=document.id) }}" method="post" data-confirm="Delete {{ document.name }}? This cannot be undone.">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     {% else %}
       <p>No documents yet.</p>
     {% endif %}

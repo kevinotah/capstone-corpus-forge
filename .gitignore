@@ -17,6 +17,7 @@ __pycache__/
 # Env and secrets
 .env
 
+
 # ChromaDB persistent storage
 chroma_db/
 
