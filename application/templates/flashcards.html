@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+
+{% block title %}Flashcards — Corpus Forge{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Flashcards</h1>
+  <p>AI-generated flashcards from your selected documents.</p>
+</section>
+
+{% if not selected_docs %}
+<section class="panel">
+  <p class="muted">No documents selected. <a href="{{ url_for('index') }}">Go select some</a> first.</p>
+</section>
+{% else %}
+<section class="panel chat-meta">
+  <p class="muted">
+    Using:
+    {% for doc in selected_docs %}
+      <span class="doc-chip">{{ doc.name }}</span>{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </p>
+</section>
+
+<section class="panel fc-controls">
+  <button id="generate-btn" class="btn btn-primary">Generate Flashcards</button>
+  <span id="fc-status" class="muted"></span>
+</section>
+
+<section class="panel" id="fc-section" style="display:none;">
+  <div class="fc-nav">
+    <button id="fc-prev" class="btn btn-ghost">← Prev</button>
+    <span id="fc-counter" class="muted">1 / 1</span>
+    <button id="fc-next" class="btn btn-ghost">Next →</button>
+  </div>
+
+  <div id="fc-card" class="fc-card" tabindex="0" role="button" aria-label="Flashcard, click to flip">
+    <div class="fc-inner">
+      <div class="fc-front">
+        <span class="fc-label">Question</span>
+        <p id="fc-front-text" class="fc-text"></p>
+      </div>
+      <div class="fc-back">
+        <span class="fc-label">Answer</span>
+        <p id="fc-back-text" class="fc-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <p class="muted fc-hint">Click the card to flip it</p>
+</section>
+
+<section class="panel usage-panel" id="usage-panel" style="display:none;">
+  <p class="muted usage-text">Tokens used — Input: <span id="usage-input">0</span> / Output: <span id="usage-output">0</span></p>
+</section>
+{% endif %}
+
+<style>
+.chat-meta {
+  padding: 0.75rem 1.25rem;
+}
+
+.doc-chip {
+  display: inline-block;
+  background: rgba(15, 122, 114, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(15, 122, 114, 0.25);
+  border-radius: 6px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.fc-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.fc-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.fc-card {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 600px;
+  height: 260px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+.fc-card:focus-visible {
+  outline: 3px solid rgba(15, 122, 114, 0.4);
+  border-radius: 14px;
+}
+
+.fc-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.45s ease;
+}
+
+.fc-card.flipped .fc-inner {
+  transform: rotateY(180deg);
+}
+
+.fc-front,
+.fc-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 14px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1px solid var(--line);
+}
+
+.fc-front {
+  background: var(--card);
+}
+
+.fc-back {
+  background: linear-gradient(145deg, rgba(15, 122, 114, 0.08), rgba(15, 122, 114, 0) 60%), var(--card);
+  transform: rotateY(180deg);
+}
+
+.fc-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.fc-text {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0;
+}
+
+.fc-hint {
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
+.usage-panel {
+  padding: 0.6rem 1.25rem;
+}
+
+.usage-text {
+  font-size: 0.85rem;
+}
+</style>
+
+<script>
+(function () {
+  const generateBtn = document.getElementById('generate-btn');
+  const fcStatus    = document.getElementById('fc-status');
+  const fcSection   = document.getElementById('fc-section');
+  const fcCard      = document.getElementById('fc-card');
+  const fcFrontText = document.getElementById('fc-front-text');
+  const fcBackText  = document.getElementById('fc-back-text');
+  const fcCounter   = document.getElementById('fc-counter');
+  const fcPrev      = document.getElementById('fc-prev');
+  const fcNext      = document.getElementById('fc-next');
+  const usagePanel  = document.getElementById('usage-panel');
+  const usageIn     = document.getElementById('usage-input');
+  const usageOut    = document.getElementById('usage-output');
+
+  if (!generateBtn) return;
+
+  let cards = [];
+  let current = 0;
+
+  function showCard(index) {
+    if (!cards.length) return;
+    fcCard.classList.remove('flipped');
+    fcFrontText.textContent = cards[index].front;
+    fcBackText.textContent  = cards[index].back;
+    fcCounter.textContent   = `${index + 1} / ${cards.length}`;
+  }
+
+  fcCard.addEventListener('click', () => fcCard.classList.toggle('flipped'));
+  fcCard.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fcCard.classList.toggle('flipped');
+    }
+  });
+
+  fcPrev.addEventListener('click', () => {
+    current = (current - 1 + cards.length) % cards.length;
+    showCard(current);
+  });
+
+  fcNext.addEventListener('click', () => {
+    current = (current + 1) % cards.length;
+    showCard(current);
+  });
+
+  generateBtn.addEventListener('click', async () => {
+    generateBtn.disabled = true;
+    fcStatus.textContent = 'Generating…';
+    fcSection.style.display = 'none';
+
+    try {
+      const response = await fetch('/flashcards', { method: 'POST' });
+      const data = await response.json();
+
+      if (data.error) {
+        fcStatus.textContent = data.error;
+        return;
+      }
+
+      // Parse the JSON array from the answer string
+      let parsed;
+      try {
+        const clean = data.answer.replace(/```json|```/g, '').trim();
+        parsed = JSON.parse(clean);
+        if (!parsed.length) {
+            fcStatus.textContent = 'No flashcards generated. Try again.';
+            return;
+        }
+      } catch {
+        fcStatus.textContent = 'Could not parse flashcards. Try again.';
+        return;
+      }
+
+      cards = parsed;
+      current = 0;
+      showCard(current);
+      fcSection.style.display = 'block';
+      fcStatus.textContent = `${cards.length} cards generated`;
+
+      if (data.usage && (data.usage.input_tokens || data.usage.output_tokens)) {
+        usageIn.textContent  = data.usage.input_tokens  ?? 0;
+        usageOut.textContent = data.usage.output_tokens ?? 0;
+        usagePanel.style.display = 'block';
+      }
+    } catch {
+      fcStatus.textContent = 'Something went wrong. Try again.';
+    } finally {
+      generateBtn.disabled = false;
+    }
+  });
+})();
+</script>
+{% endblock %}

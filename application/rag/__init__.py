@@ -1,10 +1,22 @@
-"""RAG/No-RAG integration module (Stage 2 skeleton)
+"""RAG / NoRAG integration module.
 
-TODOs:
-- Provide a single entrypoint class (RAGEngine) that the web app can import.
-- Keep implementations pluggable: a "no-rag" simple dumper and a "rag" retriever-backed path.
+Quick start (NoRAG — no ChromaDB needed):
+
+    from application.rag import NoRAGEngine
+
+    engine = NoRAGEngine(api_key="YOUR_GOOGLE_API_KEY")
+    result = engine.answer("chat", "Summarise these docs", selected_docs)
+    print(result["answer"])
+
+Quick start (RAG — requires chromadb + sentence-transformers):
+
+    from application.rag import RAGEngine
+    from application.rag.retriever import SimpleRetriever
+
+    engine = RAGEngine(retriever=SimpleRetriever(), api_key="YOUR_GOOGLE_API_KEY")
+    result = engine.answer("chat", "What does section 3 say?", selected_docs)
 """
 
-# TODO: implement RAGEngine, NoRAGEngine, and hooks for configuration
+from application.rag.engine import NoRAGEngine, RAGEngine
 
 __all__ = ["RAGEngine", "NoRAGEngine"]

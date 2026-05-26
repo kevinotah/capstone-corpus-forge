@@ -12,6 +12,10 @@ from werkzeug.exceptions import RequestEntityTooLarge
 
 from application import config as default_config
 from application.storage import DocumentStore
+from application.rag import NoRAGEngine
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 def create_app(test_config: dict | None = None) -> Flask:
@@ -28,11 +32,59 @@ def create_app(test_config: dict | None = None) -> Flask:
 
     store = DocumentStore(Path(app.config["UPLOAD_FOLDER"]).parent, app.config["DATABASE_PATH"])
 
+    engine = NoRAGEngine(api_key=os.environ.get("GOOGLE_API_KEY"))
+
+    @app.post("/chat")
+    def chat():
+        data = request.get_json(silent=True) or {}
+        message = (data.get("message") or "").strip()
+        if not message:
+            return jsonify({"error": "No message provided."}), 400
+        selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
+        if not selected_docs:
+            return jsonify({"answer": "Please select at least one document before chatting.", "usage": {}}), 200
+        result = engine.answer("chat", message, selected_docs)
+        return jsonify(result), 200
+    
+    @app.get("/chat-page")
+    def chat_page():
+        selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
+        return render_template("chat.html", selected_docs=selected_docs)
+
+
     def allowed_file(file_name: str) -> bool:
         if "." not in file_name:
             return False
         extension = file_name.rsplit(".", 1)[1].lower()
         return extension in app.config["ALLOWED_EXTENSIONS"]
+
+    @app.get("/flashcards-page")
+    def flashcards_page():
+        selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
+        return render_template("flashcards.html", selected_docs=selected_docs)
+
+    @app.post("/flashcards")
+    def flashcards():
+        selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
+        if not selected_docs:
+            return jsonify({"error": "Please select at least one document."}), 200
+        params = {"num_cards": 10}
+        result = engine.answer("flashcards", "", selected_docs, params)
+        return jsonify(result), 200
+
+    @app.get("/quiz-page")
+    def quiz_page():
+        selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
+        return render_template("quiz.html", selected_docs=selected_docs)
+
+    @app.post("/quiz")
+    def quiz():
+        selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
+        if not selected_docs:
+            return jsonify({"error": "Please select at least one document."}), 200
+        params = {"num_questions": 5, "difficulty": "medium"}
+        result = engine.answer("quiz", "", selected_docs, params)
+        return jsonify(result), 200
 
     @app.post("/upload")
     def upload_document():

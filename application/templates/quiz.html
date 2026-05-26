@@ -1,0 +1,383 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz — Corpus Forge{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Quiz</h1>
+  <p>Test your knowledge from your selected documents.</p>
+</section>
+
+{% if not selected_docs %}
+<section class="panel">
+  <p class="muted">No documents selected. <a href="{{ url_for('index') }}">Go select some</a> first.</p>
+</section>
+{% else %}
+<section class="panel chat-meta">
+  <p class="muted">
+    Using:
+    {% for doc in selected_docs %}
+      <span class="doc-chip">{{ doc.name }}</span>{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </p>
+</section>
+
+<section class="panel quiz-controls">
+  <button id="generate-btn" class="btn btn-primary">Generate Quiz</button>
+  <span id="quiz-status" class="muted"></span>
+</section>
+
+<section class="panel" id="quiz-section" style="display:none;">
+  <div id="quiz-content"></div>
+
+  <div class="quiz-nav" id="quiz-nav" style="display:none;">
+    <button id="quiz-prev" class="btn btn-ghost">← Prev</button>
+    <span id="quiz-counter" class="muted">1 / 5</span>
+    <button id="quiz-next" class="btn btn-ghost">Next →</button>
+    <button id="quiz-submit" class="btn btn-primary" style="display:none;">Submit Quiz</button>
+  </div>
+</section>
+
+<section class="panel" id="results-section" style="display:none;">
+  <h2>Results</h2>
+  <div id="results-score" class="results-score"></div>
+  <div id="results-breakdown" class="results-breakdown"></div>
+  <button id="retake-btn" class="btn btn-secondary" style="margin-top:1rem;">Retake Quiz</button>
+</section>
+
+<section class="panel usage-panel" id="usage-panel" style="display:none;">
+  <p class="muted usage-text">Tokens used — Input: <span id="usage-input">0</span> / Output: <span id="usage-output">0</span></p>
+</section>
+{% endif %}
+
+<style>
+.chat-meta {
+  padding: 0.75rem 1.25rem;
+}
+
+.doc-chip {
+  display: inline-block;
+  background: rgba(15, 122, 114, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(15, 122, 114, 0.25);
+  border-radius: 6px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.quiz-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.question-block {
+  display: none;
+}
+
+.question-block.active {
+  display: block;
+}
+
+.question-text {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 1.1rem;
+  line-height: 1.5;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.option-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--card-muted);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.option-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: rgba(15, 122, 114, 0.06);
+}
+
+.option-btn.selected {
+  border-color: var(--accent);
+  background: rgba(15, 122, 114, 0.1);
+  font-weight: 600;
+}
+
+.option-btn.correct {
+  border-color: var(--accent);
+  background: rgba(15, 122, 114, 0.15);
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.option-btn.wrong {
+  border-color: var(--danger);
+  background: rgba(179, 58, 43, 0.08);
+  color: var(--danger);
+}
+
+.quiz-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.results-score {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.results-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.result-item {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem;
+  background: var(--card-muted);
+}
+
+.result-item.correct-item {
+  border-color: rgba(15, 122, 114, 0.3);
+}
+
+.result-item.wrong-item {
+  border-color: rgba(179, 58, 43, 0.3);
+}
+
+.result-q {
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.result-meta {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-bottom: 0.3rem;
+}
+
+.result-explanation {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: 0.4rem;
+}
+
+.usage-panel {
+  padding: 0.6rem 1.25rem;
+}
+
+.usage-text {
+  font-size: 0.85rem;
+}
+</style>
+
+<script>
+(function () {
+  const generateBtn   = document.getElementById('generate-btn');
+  const quizStatus    = document.getElementById('quiz-status');
+  const quizSection   = document.getElementById('quiz-section');
+  const quizContent   = document.getElementById('quiz-content');
+  const quizNav       = document.getElementById('quiz-nav');
+  const quizPrev      = document.getElementById('quiz-prev');
+  const quizNext      = document.getElementById('quiz-next');
+  const quizSubmit    = document.getElementById('quiz-submit');
+  const quizCounter   = document.getElementById('quiz-counter');
+  const resultsSection = document.getElementById('results-section');
+  const resultsScore  = document.getElementById('results-score');
+  const resultsBreakdown = document.getElementById('results-breakdown');
+  const retakeBtn     = document.getElementById('retake-btn');
+  const usagePanel    = document.getElementById('usage-panel');
+  const usageIn       = document.getElementById('usage-input');
+  const usageOut      = document.getElementById('usage-output');
+
+  if (!generateBtn) return;
+
+  let questions = [];
+  let answers   = {};
+  let current   = 0;
+
+  function renderQuestions() {
+    quizContent.innerHTML = '';
+    questions.forEach((q, i) => {
+      const block = document.createElement('div');
+      block.className = 'question-block' + (i === 0 ? ' active' : '');
+      block.id = 'q-' + i;
+
+      const qText = document.createElement('p');
+      qText.className = 'question-text';
+      qText.textContent = `${i + 1}. ${q.question}`;
+      block.appendChild(qText);
+
+      const ul = document.createElement('ul');
+      ul.className = 'options-list';
+
+      q.options.forEach((opt) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => selectAnswer(i, opt, ul));
+        li.appendChild(btn);
+        ul.appendChild(li);
+      });
+
+      block.appendChild(ul);
+      quizContent.appendChild(block);
+    });
+  }
+
+  function selectAnswer(qIndex, opt, ul) {
+    answers[qIndex] = opt;
+    ul.querySelectorAll('.option-btn').forEach(btn => {
+      btn.classList.toggle('selected', btn.textContent === opt);
+    });
+  }
+
+  function showQuestion(index) {
+    document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+    const block = document.getElementById('q-' + index);
+    if (block) block.classList.add('active');
+    quizCounter.textContent = `${index + 1} / ${questions.length}`;
+
+    quizPrev.style.display   = index === 0 ? 'none' : '';
+    quizNext.style.display   = index === questions.length - 1 ? 'none' : '';
+    quizSubmit.style.display = index === questions.length - 1 ? '' : 'none';
+  }
+
+  function submitQuiz() {
+    let score = 0;
+    resultsBreakdown.innerHTML = '';
+
+    questions.forEach((q, i) => {
+      const userAnswer = answers[i] || null;
+      // The answer field from Gemini is just the letter e.g. "A"
+      // Match it against the option that starts with that letter
+      const correctOption = q.options.find(o => o.startsWith(q.answer));
+      const isCorrect = userAnswer === correctOption;
+      if (isCorrect) score++;
+
+      const item = document.createElement('div');
+      item.className = 'result-item ' + (isCorrect ? 'correct-item' : 'wrong-item');
+
+      const rq = document.createElement('p');
+      rq.className = 'result-q';
+      rq.textContent = `${i + 1}. ${q.question}`;
+
+      const rm1 = document.createElement('p');
+      rm1.className = 'result-meta';
+      rm1.textContent = `Your answer: ${userAnswer || 'No answer'}`;
+
+      const rm2 = document.createElement('p');
+      rm2.className = 'result-meta';
+      rm2.textContent = `Correct answer: ${correctOption || q.answer}`;
+
+      const re = document.createElement('p');
+      re.className = 'result-explanation';
+      re.textContent = q.explanation || '';
+
+item.append(rq, rm1, rm2, re);
+      resultsBreakdown.appendChild(item);
+    });
+
+    resultsScore.textContent = `${score} / ${questions.length}`;
+    quizSection.style.display   = 'none';
+    resultsSection.style.display = 'block';
+  }
+
+  function resetQuiz() {
+    answers  = {};
+    current  = 0;
+    resultsSection.style.display = 'none';
+    quizSection.style.display    = 'block';
+    renderQuestions();
+    showQuestion(0);
+  }
+
+  quizPrev.addEventListener('click', () => {
+    current = Math.max(0, current - 1);
+    showQuestion(current);
+  });
+
+  quizNext.addEventListener('click', () => {
+    current = Math.min(questions.length - 1, current + 1);
+    showQuestion(current);
+  });
+
+  quizSubmit.addEventListener('click', submitQuiz);
+  retakeBtn.addEventListener('click', resetQuiz);
+
+  generateBtn.addEventListener('click', async () => {
+    generateBtn.disabled = true;
+    quizStatus.textContent = 'Generating…';
+    quizSection.style.display    = 'none';
+    resultsSection.style.display = 'none';
+
+    try {
+      const response = await fetch('/quiz', { method: 'POST' });
+      const data = await response.json();
+
+      if (data.error) {
+        quizStatus.textContent = data.error;
+        return;
+      }
+
+      let parsed;
+      try {
+        const clean = data.answer.replace(/```json|```/g, '').trim();
+        parsed = JSON.parse(clean);
+      } catch {
+        quizStatus.textContent = 'Could not parse quiz. Try again.';
+        return;
+      }
+
+      questions = parsed;
+      answers   = {};
+      current   = 0;
+
+      renderQuestions();
+      showQuestion(0);
+      quizSection.style.display = 'block';
+      quizNav.style.display     = 'flex';
+      quizStatus.textContent    = `${questions.length} questions generated`;
+
+      if (data.usage && (data.usage.input_tokens || data.usage.output_tokens)) {
+        usageIn.textContent  = data.usage.input_tokens  ?? 0;
+        usageOut.textContent = data.usage.output_tokens ?? 0;
+        usagePanel.style.display = 'block';
+      }
+    } catch {
+      quizStatus.textContent = 'Something went wrong. Try again.';
+    } finally {
+      generateBtn.disabled = false;
+    }
+  });
+})();
+</script>
+{% endblock %}
