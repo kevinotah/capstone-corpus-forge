@@ -644,3 +644,8 @@
 - **Hook Version**: 1.02
 - **Date**: 26-05-2026 13:13
 - **Prompt**: I am about to implement the quiz method. Do you have any recommendations on how to do it?
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 26-05-2026 13:15
+- **Prompt**: wait i have already done all the RAG no rag thing, so i just need to do UI design and linking?
