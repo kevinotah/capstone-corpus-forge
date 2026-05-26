@@ -1,8 +1,3 @@
-"""Retriever interface and implementations.
-
-NoRetriever  — returns the full text of each selected document (NoRAG path).
-SimpleRetriever — vector-store backed retriever (RAG path, Stage 2 extension).
-"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -14,13 +9,13 @@ class BaseRetriever:
         """Return a list of passages relevant to `query`.
 
         Each item must have at least {"id": str, "text": str}.
+
+        For now it is not needed. It will be used in the future in case
         """
         raise NotImplementedError
 
 
 class NoRetriever(BaseRetriever):
-    """Dumps the full text of every selected document — no retrieval logic."""
-
     def retrieve(self, query: str, docs: list[dict[str, Any]]) -> list[dict[str, Any]]:
         passages = []
         for doc in docs:
@@ -44,12 +39,6 @@ class NoRetriever(BaseRetriever):
 
 
 class SimpleRetriever(BaseRetriever):
-    """Chunk-and-embed retriever backed by ChromaDB (RAG path).
-
-    Install extras to use:
-        pip install chromadb sentence-transformers
-    """
-
     def __init__(self, collection_name: str = "corpus_forge", db_path: str = "./chroma_db") -> None:
         try:
             import chromadb
@@ -66,7 +55,6 @@ class SimpleRetriever(BaseRetriever):
             self._available = False
 
     def index_document(self, doc: dict[str, Any]) -> None:
-        """Index a single document into ChromaDB (idempotent — skips if already indexed)."""
         if not self._available:
             return
 

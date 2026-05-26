@@ -1,21 +1,9 @@
-"""Prompt templates for each AI mode.
-
-compose_prompt(mode, query, passages, params) → str
-
-Modes: "chat", "flashcards", "quiz", "code_review"
-params keys (all optional):
-    tone        — e.g. "formal", "casual", "concise"
-    num_cards   — number of flashcards to generate (default 10)
-    num_questions — number of quiz questions (default 5)
-    difficulty  — "easy", "medium", "hard"
-"""
 from __future__ import annotations
 
 from typing import Any
 
 
 def _format_passages(passages: list[dict[str, Any]]) -> str:
-    """Turn a list of passage dicts into a readable block for the prompt."""
     parts = []
     for p in passages:
         name = p.get("name", "document")
