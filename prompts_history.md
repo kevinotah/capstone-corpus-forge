@@ -319,3 +319,6 @@
 ### 26-05-2026 13:04
 - **Prompt**: I have roughly implemented the rough rag for the chat method. Please refer to the #file:rag folder and the #file:app.py as they have been added and adjusted for rag implementation. DO NOT EDIT ANY OF THEM. Please tell me if you find any issues with it
 
+### 26-05-2026 13:10
+- **Prompt**: I use app.get for links, is that fine?
+

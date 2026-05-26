@@ -624,3 +624,18 @@
 - **Hook Version**: 1.02
 - **Date**: 26-05-2026 13:04
 - **Prompt**: I have roughly implemented the rough rag for the chat method. Please refer to the #file:rag folder and the #file:app.py as they have been added and adjusted for rag implementation. DO NOT EDIT ANY OF THEM. Please tell me if you find any issues with it
+### **New Interaction**
+- **Agent Version**: 2.3
+- **Date**: 26-05-2026 00:00
+- **User**: anh-duc.vo@epita.fr
+- **Prompt**: I have roughly implemented the rough rag for the chat method. Please refer to the #file:rag folder and the #file:app.py as they have been added and adjusted for rag implementation. DO NOT EDIT ANY OF THEM. Please tell me if you find any issues with it
+- **CoPilot Mode**: Agent
+- **CoPilot Model**: GPT-5.4 mini
+- **Socratic Mode**: ON
+- **Changes Made**: No code changes; reviewed the RAG/chat integration for issues.
+- **Context and Reasons for Changes**: User requested a review of the current RAG implementation without edits.
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 26-05-2026 13:10
+- **Prompt**: I use app.get for links, is that fine?
