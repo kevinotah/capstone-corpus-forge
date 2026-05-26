@@ -619,3 +619,8 @@
 - **Hook Version**: 1.02
 - **Date**: 25-05-2026 22:43
 - **Prompt**: I have added the plans for stage 2 inside #file:betterPlan.md . Can you make the files / skeletons and todos for the files for smooth implementation of stage 2, just like how you did for stage 1? Reminder to create a separate folder for importing the rag / no-rag AI
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 26-05-2026 13:04
+- **Prompt**: I have roughly implemented the rough rag for the chat method. Please refer to the #file:rag folder and the #file:app.py as they have been added and adjusted for rag implementation. DO NOT EDIT ANY OF THEM. Please tell me if you find any issues with it
