@@ -328,3 +328,6 @@
 ### 26-05-2026 13:15
 - **Prompt**: wait i have already done all the RAG no rag thing, so i just need to do UI design and linking?
 
+### 26-05-2026 13:20
+- **Prompt**: I have implemented quiz and flashcards. Can you check if there is any error?
+
