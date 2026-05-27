@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+
+{% block title %}Code Review — Corpus Forge{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <h1>Code Review</h1>
+  <p>AI-powered review of your uploaded code files.</p>
+</section>
+
+{% if not selected_docs %}
+<section class="panel">
+  <p class="muted">No documents selected. <a href="{{ url_for('index') }}">Go select some</a> first.</p>
+</section>
+{% elif not code_docs %}
+<section class="panel">
+  <p class="muted">No code files found in your selected documents. Upload a <strong>.py, .js, .ts, .java, .c, .cpp</strong> file and select it.</p>
+</section>
+{% else %}
+<section class="panel chat-meta">
+  <p class="muted">
+    Reviewing:
+    {% for doc in code_docs %}
+      <span class="doc-chip">{{ doc.name }}</span>{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </p>
+</section>
+
+<section class="panel cr-controls">
+  <div class="cr-input-row">
+    <input
+      id="focus-input"
+      type="text"
+      class="cr-input"
+      placeholder="Optional: focus area e.g. 'error handling' or 'performance'"
+      aria-label="Review focus"
+    >
+    <button id="review-btn" class="btn btn-primary">Review Code</button>
+  </div>
+  <span id="cr-status" class="muted"></span>
+</section>
+
+<section class="panel" id="cr-section" style="display:none;">
+
+  <div class="cr-block" id="cr-summary-block">
+    <h3 class="cr-heading">📋 Summary</h3>
+    <p id="cr-summary" class="cr-text"></p>
+  </div>
+
+  <div class="cr-columns">
+    <div class="cr-block cr-strengths" id="cr-strengths-block">
+      <h3 class="cr-heading">✅ Strengths</h3>
+      <ul id="cr-strengths" class="cr-list"></ul>
+    </div>
+
+    <div class="cr-block cr-issues" id="cr-issues-block">
+      <h3 class="cr-heading">⚠️ Issues & Improvements</h3>
+      <ul id="cr-issues" class="cr-list"></ul>
+    </div>
+  </div>
+
+  <div class="cr-block cr-rating-block">
+    <h3 class="cr-heading">⭐ Overall Rating</h3>
+    <p id="cr-rating" class="cr-rating-text"></p>
+  </div>
+
+  <details class="cr-raw">
+    <summary class="muted">Show raw response</summary>
+    <pre id="cr-raw-text" class="cr-pre"></pre>
+  </details>
+</section>
+
+<section class="panel usage-panel" id="usage-panel" style="display:none;">
+  <p class="muted usage-text">Tokens used — Input: <span id="usage-input">0</span> / Output: <span id="usage-output">0</span></p>
+</section>
+{% endif %}
+
+<style>
+.chat-meta {
+  padding: 0.75rem 1.25rem;
+}
+
+.doc-chip {
+  display: inline-block;
+  background: rgba(15, 122, 114, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(15, 122, 114, 0.25);
+  border-radius: 6px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.cr-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.cr-input-row {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.cr-input {
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  font: inherit;
+  font-size: 0.95rem;
+  background: var(--card-muted);
+  color: var(--ink);
+  transition: border-color 140ms ease;
+}
+
+.cr-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.cr-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 760px) {
+  .cr-columns { grid-template-columns: 1fr; }
+}
+
+.cr-block {
+  background: var(--card-muted);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.cr-strengths {
+  border-color: rgba(15, 122, 114, 0.3);
+  background: rgba(15, 122, 114, 0.04);
+}
+
+.cr-issues {
+  border-color: rgba(179, 58, 43, 0.3);
+  background: rgba(179, 58, 43, 0.04);
+}
+
+.cr-heading {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  color: var(--ink);
+}
+
+.cr-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0;
+}
+
+.cr-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cr-list li {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.cr-rating-text {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin: 0;
+}
+
+.cr-raw {
+  margin-top: 0.5rem;
+}
+
+.cr-raw summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.cr-pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem;
+  font-size: 0.82rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.usage-panel {
+  padding: 0.6rem 1.25rem;
+}
+
+.usage-text {
+  font-size: 0.85rem;
+}
+</style>
+
+<script>
+(function () {
+  const reviewBtn  = document.getElementById('review-btn');
+  const focusInput = document.getElementById('focus-input');
+  const crStatus   = document.getElementById('cr-status');
+  const crSection  = document.getElementById('cr-section');
+  const crSummary  = document.getElementById('cr-summary');
+  const crStrengths = document.getElementById('cr-strengths');
+  const crIssues   = document.getElementById('cr-issues');
+  const crRating   = document.getElementById('cr-rating');
+  const crRawText  = document.getElementById('cr-raw-text');
+  const usagePanel = document.getElementById('usage-panel');
+  const usageIn    = document.getElementById('usage-input');
+  const usageOut   = document.getElementById('usage-output');
+
+  if (!reviewBtn) return;
+
+  function parseSection(text, heading) {
+    // Extract numbered list items under a heading
+    const pattern = new RegExp(heading + '[\\s\\S]*?(?=\\n#+\\s|\\n\\d\\.\\s*$|$)', 'i');
+    const match = text.match(pattern);
+    if (!match) return [];
+    const lines = match[0].split('\n').slice(1);
+    return lines
+      .map(l => l.replace(/^[-*\d.]+\s*/, '').trim())
+      .filter(l => l.length > 0);
+  }
+
+  function extractSummary(text) {
+    const lines = text.split('\n');
+    // First non-heading, non-empty line after "Summary" or just the first paragraph
+    let inSummary = false;
+    for (const line of lines) {
+      if (/summary/i.test(line)) { inSummary = true; continue; }
+      if (inSummary && line.trim()) return line.trim();
+    }
+    // Fallback: first non-empty non-heading line
+    return lines.find(l => l.trim() && !l.startsWith('#')) || text.slice(0, 200);
+  }
+
+  function extractRating(text) {
+    const match = text.match(/(\d(\.\d)?)\s*\/\s*5/);
+    return match ? match[0] : 'See raw response';
+  }
+
+  function populateList(ul, items) {
+    ul.innerHTML = '';
+    if (!items.length) {
+      const li = document.createElement('li');
+      li.textContent = 'None found.';
+      ul.appendChild(li);
+      return;
+    }
+    items.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+  }
+
+  reviewBtn.addEventListener('click', async () => {
+    reviewBtn.disabled = true;
+    crStatus.textContent = 'Reviewing…';
+    crSection.style.display = 'none';
+
+    const focus = focusInput ? focusInput.value.trim() : '';
+
+    try {
+      const response = await fetch('/codereview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ focus }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        crStatus.textContent = data.error;
+        return;
+      }
+
+      const raw = data.answer || '';
+      crRawText.textContent = raw;
+
+      crSummary.textContent  = extractSummary(raw);
+      crRating.textContent   = extractRating(raw);
+      populateList(crStrengths, parseSection(raw, 'Strength'));
+      populateList(crIssues,    parseSection(raw, 'Issue|Improvement'));
+
+      crSection.style.display = 'block';
+      crStatus.textContent = 'Review complete';
+
+      if (data.usage && (data.usage.input_tokens || data.usage.output_tokens)) {
+        usageIn.textContent  = data.usage.input_tokens  ?? 0;
+        usageOut.textContent = data.usage.output_tokens ?? 0;
+        usagePanel.style.display = 'block';
+      }
+    } catch {
+      crStatus.textContent = 'Something went wrong. Try again.';
+    } finally {
+      reviewBtn.disabled = false;
+    }
+  });
+})();
+</script>
+{% endblock %}

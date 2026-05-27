@@ -6,12 +6,6 @@ from typing import Any
 
 class BaseRetriever:
     def retrieve(self, query: str, docs: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        """Return a list of passages relevant to `query`.
-
-        Each item must have at least {"id": str, "text": str}.
-
-        For now it is not needed. It will be used in the future in case
-        """
         raise NotImplementedError
 
 
@@ -54,6 +48,24 @@ class SimpleRetriever(BaseRetriever):
         except ImportError:
             self._available = False
 
+    def _read_file(self, path: Path) -> str:
+        try:
+            if path.suffix.lower() == ".pdf":
+                from pypdf import PdfReader
+                reader = PdfReader(str(path))
+                return "\n".join(page.extract_text() or "" for page in reader.pages)
+            return path.read_text(encoding="utf-8", errors="replace")
+        except (OSError, ImportError):
+            return ""
+
+    def _is_indexed(self, doc_id: str) -> bool:
+        try:
+            # Get chunks whose ID starts with doc_id prefix
+            existing = self._collection.get(ids=[f"{doc_id}_0"])
+            return len(existing["ids"]) > 0
+        except Exception:
+            return False
+
     def index_document(self, doc: dict[str, Any]) -> None:
         if not self._available:
             return
@@ -61,17 +73,13 @@ class SimpleRetriever(BaseRetriever):
         doc_id = doc.get("id", "")
         path = Path(doc.get("path", ""))
 
-        # Check if already indexed by querying for a known id prefix
-        existing = self._collection.get(where={"doc_id": doc_id}, limit=1)
-        if existing["ids"]:
+        if self._is_indexed(doc_id):
             return
 
-        try:
-            text = path.read_text(encoding="utf-8", errors="replace")
-        except OSError:
+        text = self._read_file(path)
+        if not text.strip():
             return
 
-        # Split into paragraphs, keep chunks with enough content
         chunks = [c.strip() for c in text.split("\n\n") if len(c.strip()) > 80]
         if not chunks:
             return
@@ -86,23 +94,30 @@ class SimpleRetriever(BaseRetriever):
         if not self._available or not docs:
             return []
 
-        # Ensure all docs are indexed
         for doc in docs:
             self.index_document(doc)
 
-        doc_ids = [doc["id"] for doc in docs]
+        try:
+            total = self._collection.count()
+            safe_n = min(n_results * len(docs), max(1, total))
 
-        results = self._collection.query(
-            query_texts=[query],
-            n_results=n_results,
-            where={"doc_id": {"$in": doc_ids}},
-        )
+            results = self._collection.query(
+                query_texts=[query],
+                n_results=safe_n,
+            )
+        except Exception:
+            return []
 
+        doc_ids = {doc["id"] for doc in docs}
         passages = []
         for text, meta in zip(results["documents"][0], results["metadatas"][0]):
-            passages.append({
-                "id": meta.get("doc_id", ""),
-                "name": meta.get("name", ""),
-                "text": text,
-            })
+            if meta.get("doc_id") in doc_ids:
+                passages.append({
+                    "id": meta.get("doc_id", ""),
+                    "name": meta.get("name", ""),
+                    "text": text,
+                })
+            if len(passages) >= n_results:
+                break
+
         return passages

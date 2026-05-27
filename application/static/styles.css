@@ -311,3 +311,38 @@ th {
     display: flex;
   }
 }
+
+.settings-panel {
+  padding: 0.75rem 1.25rem;
+}
+
+.settings-toggle {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.settings-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  align-items: center;
+}
+
+.settings-body label {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.settings-select,
+.settings-input {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  font-size: 0.9rem;
+  background: var(--card-muted);
+  color: var(--ink);
+}

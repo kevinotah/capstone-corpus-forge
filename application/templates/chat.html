@@ -22,6 +22,19 @@
   </p>
 </section>
 
+<details class="panel settings-panel">
+  <summary class="settings-toggle">Settings</summary>
+  <div class="settings-body">
+    <label for="tone-select">Tone</label>
+    <select id="tone-select" class="settings-select">
+      <option value="helpful and clear">Default</option>
+      <option value="formal">Formal</option>
+      <option value="casual">Casual</option>
+      <option value="concise">Concise</option>
+    </select>
+  </div>
+</details>
+
 <section class="panel chat-panel">
   <div id="chat-messages" class="chat-messages" aria-live="polite" aria-label="Chat messages">
     <div class="chat-bubble assistant">
@@ -193,6 +206,7 @@
   async function sendMessage() {
     const message = inputEl.value.trim();
     if (!message) return;
+    const tone = document.getElementById('tone-select')?.value || 'helpful and clear';
 
     errorEl.textContent = '';
     inputEl.value = '';
@@ -206,7 +220,7 @@
       const response = await fetch('/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ message, tone }),
       });
 
       const data = await response.json();

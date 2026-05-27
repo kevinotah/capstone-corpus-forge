@@ -16,7 +16,6 @@ class RAGEngine:
     ) -> None:
         self.retriever = retriever
         self.config = config or {}
-
         self._api_key = api_key or os.environ.get("GOOGLE_API_KEY", "")
         self._client = self._build_client()
 
@@ -27,6 +26,7 @@ class RAGEngine:
         selected_docs: list[dict[str, Any]],
         params: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
+        """Run the full pipeline and return {"answer": str, "usage": dict}."""
         passages = self.retriever.retrieve(query, selected_docs)
         prompt = compose_prompt(mode, query, passages, params)
         return self._call_llm(prompt)
@@ -54,10 +54,7 @@ class RAGEngine:
                 model=model,
                 contents=prompt,
             )
-
             answer = response.text or ""
-
-            # Extract token usage if available
             usage = {}
             if hasattr(response, "usage_metadata") and response.usage_metadata:
                 meta = response.usage_metadata
@@ -65,7 +62,6 @@ class RAGEngine:
                     "input_tokens": getattr(meta, "prompt_token_count", 0),
                     "output_tokens": getattr(meta, "candidates_token_count", 0),
                 }
-
             return {"answer": answer, "usage": usage}
 
         except Exception as exc:
@@ -73,5 +69,7 @@ class RAGEngine:
 
 
 class NoRAGEngine(RAGEngine):
+    """Always uses NoRetriever — dumps full document text into the prompt."""
+
     def __init__(self, api_key: str | None = None, config: dict[str, Any] | None = None) -> None:
         super().__init__(retriever=NoRetriever(), api_key=api_key, config=config)

@@ -22,6 +22,14 @@
   </p>
 </section>
 
+<details class="panel settings-panel">
+  <summary class="settings-toggle">Settings</summary>
+  <div class="settings-body">
+    <label for="cards-input">Number of cards</label>
+    <input id="cards-input" type="number" class="settings-input" value="10" min="5" max="20">
+  </div>
+</details>
+
 <section class="panel fc-controls">
   <button id="generate-btn" class="btn btn-primary">Generate Flashcards</button>
   <span id="fc-status" class="muted"></span>
@@ -216,7 +224,12 @@
     fcSection.style.display = 'none';
 
     try {
-      const response = await fetch('/flashcards', { method: 'POST' });
+      const numCards = parseInt(document.getElementById('cards-input')?.value) || 10;
+      const response = await fetch('/flashcards', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ num_cards: numCards }),
+      });
       const data = await response.json();
 
       if (data.error) {

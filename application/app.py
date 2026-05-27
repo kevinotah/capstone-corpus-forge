@@ -1,10 +1,13 @@
 from pathlib import Path
 import sys
-
+import os
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+
+from dotenv import load_dotenv
+load_dotenv()
 
 from flask import Flask, abort, jsonify, redirect, flash, render_template, request, send_file, url_for
 from werkzeug.utils import secure_filename
@@ -13,9 +16,8 @@ from werkzeug.exceptions import RequestEntityTooLarge
 from application import config as default_config
 from application.storage import DocumentStore
 from application.rag import NoRAGEngine
-import os
-from dotenv import load_dotenv
-load_dotenv()
+from application.rag.engine import RAGEngine
+from application.rag.retriever import SimpleRetriever
 
 
 def create_app(test_config: dict | None = None) -> Flask:
@@ -32,7 +34,16 @@ def create_app(test_config: dict | None = None) -> Flask:
 
     store = DocumentStore(Path(app.config["UPLOAD_FOLDER"]).parent, app.config["DATABASE_PATH"])
 
-    engine = NoRAGEngine(api_key=os.environ.get("GOOGLE_API_KEY"))
+    use_rag = os.environ.get("USE_RAG", "false").lower() == "true"
+
+    if use_rag:
+        from application.rag.engine import RAGEngine
+        engine = RAGEngine(
+            retriever=SimpleRetriever(db_path="./chroma_db"),
+            api_key=os.environ.get("GOOGLE_API_KEY"),
+        )
+    else:
+        engine = NoRAGEngine(api_key=os.environ.get("GOOGLE_API_KEY"))
 
     @app.post("/chat")
     def chat():
@@ -43,7 +54,7 @@ def create_app(test_config: dict | None = None) -> Flask:
         selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
         if not selected_docs:
             return jsonify({"answer": "Please select at least one document before chatting.", "usage": {}}), 200
-        result = engine.answer("chat", message, selected_docs)
+        result = engine.answer("chat", message, selected_docs, {"tone": data.get("tone", "helpful and clear")})
         return jsonify(result), 200
     
     @app.get("/chat-page")
@@ -68,7 +79,8 @@ def create_app(test_config: dict | None = None) -> Flask:
         selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
         if not selected_docs:
             return jsonify({"error": "Please select at least one document."}), 200
-        params = {"num_cards": 10}
+        data = request.get_json(silent=True) or {}
+        params = {"num_cards": data.get("num_cards", 10)}
         result = engine.answer("flashcards", "", selected_docs, params)
         return jsonify(result), 200
 
@@ -82,8 +94,31 @@ def create_app(test_config: dict | None = None) -> Flask:
         selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
         if not selected_docs:
             return jsonify({"error": "Please select at least one document."}), 200
-        params = {"num_questions": 5, "difficulty": "medium"}
+        data = request.get_json(silent=True) or {}
+        params = {
+            "num_questions": data.get("num_questions", 5),
+            "difficulty": data.get("difficulty", "medium"),
+        }
         result = engine.answer("quiz", "", selected_docs, params)
+        return jsonify(result), 200
+    
+    @app.get("/codereview-page")
+    def codereview_page():
+        selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
+        code_extensions = {"py", "js", "ts", "java", "c", "cpp", "cs", "html", "css"}
+        code_docs = [doc for doc in selected_docs if doc["name"].rsplit(".", 1)[-1].lower() in code_extensions]
+        return render_template("codereview.html", selected_docs=selected_docs, code_docs=code_docs)
+
+    @app.post("/codereview")
+    def codereview():
+        selected_docs = [doc for doc in store.list_documents() if doc.get("selected")]
+        code_extensions = {"py", "js", "ts", "java", "c", "cpp", "cs", "html", "css"}
+        code_docs = [doc for doc in selected_docs if doc["name"].rsplit(".", 1)[-1].lower() in code_extensions]
+        if not code_docs:
+            return jsonify({"error": "No code files selected."}), 200
+        data = request.get_json(silent=True) or {}
+        focus = data.get("focus", "General review")
+        result = engine.answer("code_review", focus, code_docs)
         return jsonify(result), 200
 
     @app.post("/upload")

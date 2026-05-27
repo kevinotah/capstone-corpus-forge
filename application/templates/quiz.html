@@ -22,6 +22,20 @@
   </p>
 </section>
 
+<details class="panel settings-panel">
+  <summary class="settings-toggle">Settings</summary>
+  <div class="settings-body">
+    <label for="difficulty-select">Difficulty</label>
+    <select id="difficulty-select" class="settings-select">
+      <option value="easy">Easy</option>
+      <option value="medium" selected>Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <label for="questions-input">Number of questions</label>
+    <input id="questions-input" type="number" class="settings-input" value="5" min="3" max="15">
+  </div>
+</details>
+
 <section class="panel quiz-controls">
   <button id="generate-btn" class="btn btn-primary">Generate Quiz</button>
   <span id="quiz-status" class="muted"></span>
@@ -340,7 +354,13 @@ item.append(rq, rm1, rm2, re);
     resultsSection.style.display = 'none';
 
     try {
-      const response = await fetch('/quiz', { method: 'POST' });
+      const difficulty = document.getElementById('difficulty-select')?.value || 'medium';
+      const numQuestions = parseInt(document.getElementById('questions-input')?.value) || 5;
+      const response = await fetch('/quiz', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ difficulty, num_questions: numQuestions }),
+      });
       const data = await response.json();
 
       if (data.error) {
