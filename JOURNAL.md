@@ -659,3 +659,8 @@
 - **Hook Version**: 1.02
 - **Date**: 26-05-2026 13:25
 - **Prompt**: Ok, it seems that you were repeating over and over again, so i would like to ask you to check #sym:flashcards , #file:chat.html and #file:quiz.html . alongside @file:app.py  to see if there is any error. DO NOT EDIT ANY FILES
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 27-05-2026 23:19
+- **Prompt**: Hello, Can you explain clearly what the files / things and functions do for the files inside #file:rag
