@@ -337,3 +337,6 @@
 ### 27-05-2026 23:19
 - **Prompt**: Hello, Can you explain clearly what the files / things and functions do for the files inside #file:rag
 
+### 28-05-2026 12:05
+- **Prompt**: Read the entire project and write a readme file inside #file:README.md on what it has, how to run it and more
+
