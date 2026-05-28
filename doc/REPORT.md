@@ -4,6 +4,8 @@
 
 * Names, epita email addresses, and GitHub usernames of all team members.
     - Vo Anh Duc: anh-duc.vo@epita.fr - voanhduc0105
+    - Cindy Gangne Fotsing: cindy.gangne-fotsing@epita.fr -  cindy-fotsing
+    - Ogbusuo Kevin Otah: kevin.ogbusuo@epita.fr - kevinotah
 
 ---
 
