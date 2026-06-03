@@ -669,3 +669,8 @@
 - **Hook Version**: 1.02
 - **Date**: 28-05-2026 12:05
 - **Prompt**: Read the entire project and write a readme file inside #file:README.md on what it has, how to run it and more
+
+### **New Interaction**
+- **Hook Version**: 1.02
+- **Date**: 03-06-2026 15:52
+- **Prompt**: can you read the entire files and see whether if there are any requirements that i am missing. Previously there were merging issues with my teammates and so it seems like the requirememnt is wrong (as my requirement file was gone, and replaced with someone else's version)
